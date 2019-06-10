@@ -23,33 +23,36 @@ Ver. 2.3.0, 2017-07-03
 
   <ui:define name="content">
   
-    <p>Bitte Namen eingeben: <h:inputText id="id_name" label="Name" 
-                    value="#{myBean.name}" required="true" size="50"
-                    title="Name eingeben und Button klicken"/>
-    </p>
-    <p><h:commandButton value="Go" action="client_hallo"/></p>
       
   <p:panel header="Ich bin ein PrimeFaces Panel" toggleable="true">
     Diese Anwendung dient als Template für Ihre eigenen Anwendungen.
   </p:panel><p/>
-  
-  <hr/><h3>Quellcode-Downloads</h3>
+ 
+ 
+<p/><h:panelGrid columns ="4">
+	  
+	 <p/> <h:panelGrid columns = "2">
+	  		Ticketnummer	<h:inputText value= "#{Helpdesk.abfrage}"></h:inputText>
+	  		Status			<h:inputText value= "#{Helpdesk.abfrage}"></h:inputText>
+	  		Bearbeiter		<h:inputText value= "#{Helpdesk.abfrage}"></h:inputText>
+	  		Kategorie		<h:inputText value= "#{Helpdesk.abfrage}"></h:inputText>
+	  		Grund			<h:inputText value= "#{Helpdesk.abfrage}"></h:inputText>
+	  		Bemerkung
+	  		
+	  </h:panelGrid><p/>
+	   
+	   <p/> <h:panelGrid columns = "2">
+  			<h:outputLabel value="Anfrage:" for="id_wochentag"/>
+  				<h:selectOneMenu id="id_wochentag">
+          			<f:selectItem itemLabel="Email"    itemValue="1"/>
+          			<f:selectItem itemLabel="Telefon"     itemValue="2"/>
+  				</h:selectOneMenu>&#160;
+  			Konfiguration: <h:inputText value= "#{Helpdesk.abfrage}"></h:inputText>
+	   </h:panelGrid><p/>
+	  <h:commandButton value="Anfrage senden" actionListener= "#{Helpdesk.insertTicket}"/>
+	  <h:commandButton value="Update senden" actionListener= "#{Helpdesk.updateTicket}"/>
+</h:panelGrid><p/>
 
-  <ul>
-    <li><a href="resources/etc/index.html.txt">index.html</a></li>
-    <li><a href="resources/etc/web.xml.txt">web.xml</a></li>
-    <li><a href="resources/etc/faces-config.xml.txt">faces-config.xml</a></li>
-    <li><a href="resources/etc/beans.xml.txt">beans.xml</a></li>
-    <li><a href="resources/etc/context.xml.txt">context.xml</a></li>    
-    <li><a href="resources/etc/myCss.css.txt">CSS file</a></li>
-    <li><a href="resources/etc/client_start.xhtml.txt">Diese Seite</a></li>
-    <li><a href="resources/etc/client_hallo.xhtml.txt">Hallo-Seite</a></li>
-    <li><a href="resources/etc/header.xhtml.txt">Header</a></li>
-    <li><a href="resources/etc/footer.xhtml.txt">Footer</a></li>
-    <li><a href="resources/etc/masterLayout.xhtml.txt">Master</a></li>
-    <li><a href="resources/etc/MyBean.java.txt">Java Bean</a></li>
-  </ul>     
-      
   </ui:define>
 </ui:composition>
 	

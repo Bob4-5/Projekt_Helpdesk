@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE faces-config>
+
+<!-- =========================================================================== 
+	faces-config.xml - JSF 2.3 Konfigurationsdatei Verzeichnis: {Projekt}/WebContent/WEB-INF/ 
+	Version: 1.0.3, 2018-11-29, wkl ============================================================================ -->
+
+<faces-config version="2.3"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee  
+              http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_3.xsd">
+
+	<application>
+
+		<locale-config>
+			<default-locale>de</default-locale>
+			<supported-locale>en</supported-locale>
+		</locale-config>
+
+	</application>
+
+	<managed-bean>
+		<managed-bean-name>mb_db</managed-bean-name>
+		<managed-bean-class>projekt_web_entwicklung.helpdesk.MDatabase</managed-bean-class>
+		<managed-bean-scope>application</managed-bean-scope>
+
+		<managed-property>
+			<description>true: Connections werden über einen Connection pool
+				verwaltet
+			</description>
+			<property-name>use_pool</property-name>
+			<value>false</value>
+		</managed-property>
+
+		<managed-property>
+			<property-name>user</property-name>
+			<value>root</value>
+		</managed-property>
+
+		<managed-property>
+			<property-name>pw</property-name>
+			<value>Database123</value>
+		</managed-property>
+
+		<managed-property>
+			<property-name>constr</property-name>
+			<value>jdbc:mysql://localhost:3306/bibliothek</value>
+		</managed-property>
+
+		<managed-property>
+			<property-name>logfile</property-name>
+			<value>logs/tomcat8/browse.log</value>
+		</managed-property>
+	</managed-bean>
+
+</faces-config>
