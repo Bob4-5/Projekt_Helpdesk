@@ -30,24 +30,34 @@ Ver. 2.3.0, 2017-07-03
  
  
 <p/><h:panelGrid columns ="4">
+
 	  
 	 <p/> <h:panelGrid columns = "2">
-	  		Ticketnummer	<h:inputText value= "#{Helpdesk.abfrage}"></h:inputText>
-	  		Status			<h:inputText value= "#{Helpdesk.abfrage}"></h:inputText>
-	  		Bearbeiter		<h:inputText value= "#{Helpdesk.abfrage}"></h:inputText>
-	  		Kategorie		<h:inputText value= "#{Helpdesk.abfrage}"></h:inputText>
-	  		Grund			<h:inputText value= "#{Helpdesk.abfrage}"></h:inputText>
-	  		Bemerkung
+	  		Ticketnummer	<h:inputText value= "#{Helpdesk.tNr}"></h:inputText>
+	  		Status			<h:inputText value= "#{Helpdesk.status}"></h:inputText>
+	  		Bearbeiter		<h:inputText value= "#{Helpdesk.user}"></h:inputText>
+	  		Kategorie		<h:inputText value= "#{Helpdesk.kategorie}"></h:inputText>
+	  		Grund			<h:inputText value= "#{Helpdesk.grund}"></h:inputText>
+	  		Bemerkung		<h:inputText value= "#{Helpdesk.bemerkung}"></h:inputText>
 	  		
 	  </h:panelGrid><p/>
 	   
 	   <p/> <h:panelGrid columns = "2">
   			<h:outputLabel value="Anfrage:" for="id_wochentag"/>
-  				<h:selectOneMenu id="id_wochentag">
-          			<f:selectItem itemLabel="Email"   	itemValue="1"/>
-          			<f:selectItem itemLabel="Telefon"	itemValue="2"/>
+  				<h:selectOneMenu       id="id_wochentag"
+  								 onchange="form.submit()" 
+  								   value = "#{helpdesk.auswahl}"
+          			 valueChangeListener = 
+          				"#{mb.cbxChangeListener}">
+          			<f:selectItems value="#{helpdesk.options}">
   				</h:selectOneMenu>&#160;
-  			Konfiguration: <h:inputText value= "#{Helpdesk.abfrage}"></h:inputText>
+  			Konfiguration: <h:inputText value= "#{Helpdesk.rechner}"></h:inputText>
+  			Start Datum	<h:inputText value= "#{Helpdesk.startDate}"></h:inputText>
+  				 <f:convertDateTime locale="de_DE" pattern="dd.MM.yyyy" type="date"
+					dateStyle="short" timeZone="MET" />
+  			Ende Datum	<h:inputText value= "#{Helpdesk.endDate}"></h:inputText>
+  				 <f:convertDateTime locale="de_DE" pattern="dd.MM.yyyy" type="date"
+					dateStyle="short" timeZone="MET" />
 	   </h:panelGrid><p/>
 	  <h:commandButton value="Anfrage senden" actionListener= "#{Helpdesk.insertTicket}"/>
 	  <h:commandButton value="Update senden" actionListener= "#{Helpdesk.updateTicket}"/>
