@@ -77,8 +77,29 @@ public class DbStatment implements Serializable {
 			}
 		}
 	}
+	
+	public List<String> selectUser(String username) {
+		List<String> bkennung = new ArrayList();
+		String statment = "select username, passwort from bearbeiter where username = " + username;
+		selectStatemnt(statment);
+		
+		try {
+			if (rs.first()) {
+				if (rs.isLast()) return null;
+				bkennung.add(rs.getNString(1));
+				bkennung.add(rs.getString(2));
+				return bkennung;
+			}
+		} catch (SQLException ex) {
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "SQLException", ex.getLocalizedMessage()));
+			out.println("Error:  " + ex);
+			ex.printStackTrace();
+		}
+		return null;
+	}
 
-	public void selectStatemnt(String SQL_SELECT) {
+	private void selectStatemnt(String SQL_SELECT) {
 		try {
 			stm = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			rs = stm.executeQuery(SQL_SELECT);
