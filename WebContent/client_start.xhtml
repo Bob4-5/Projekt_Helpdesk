@@ -8,63 +8,83 @@ Ver. 2.3.0, 2017-07-03
 ============================================================================ -->
 
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
- 
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
 <h:head></h:head>
 
 <h:body>
-  
-<ui:composition template="/masterLayout.xhtml">
 
-  <ui:define name="title">Startseite</ui:define>
+	<ui:composition template="/masterLayout.xhtml">
 
-  <ui:define name="content">
-  
-      
-  <p:panel header="Ich bin ein PrimeFaces Panel" toggleable="true">
+		<ui:define name="title">Startseite</ui:define>
+
+		<ui:define name="content">
+
+
+			<p:panel header="Ich bin ein PrimeFaces Panel" toggleable="true">
     Diese Anwendung dient als Template für Ihre eigenen Anwendungen.
-  </p:panel><p/>
- 
- 
-<p/><h:panelGrid columns ="4">
+  </p:panel>
+			<p />
 
-	  
-	 <p/> <h:panelGrid columns = "2">
-	  		Ticketnummer	<h:inputText value= "#{Helpdesk.tNr}"></h:inputText>
-	  		Status			<h:inputText value= "#{Helpdesk.status}"></h:inputText>
-	  		Bearbeiter		<h:inputText value= "#{Helpdesk.user}"></h:inputText>
-	  		Kategorie		<h:inputText value= "#{Helpdesk.kategorie}"></h:inputText>
-	  		Grund			<h:inputText value= "#{Helpdesk.grund}"></h:inputText>
-	  		Bemerkung		<h:inputText value= "#{Helpdesk.bemerkung}"></h:inputText>
-	  		
-	  </h:panelGrid><p/>
-	   
-	   <p/> <h:panelGrid columns = "2">
-  			<h:outputLabel value="Anfrage:" for="id_wochentag"/>
-  				<h:selectOneMenu       id="id_wochentag"
-  								 onchange="form.submit()" 
-  								   value = "#{helpdesk.auswahl}"
-          			 valueChangeListener = 
-          				"#{mb.cbxChangeListener}">
-          			<f:selectItems value="#{helpdesk.options}">
-  				</h:selectOneMenu>&#160;
-  			Konfiguration: <h:inputText value= "#{Helpdesk.rechner}"></h:inputText>
-  			Start Datum	<h:inputText value= "#{Helpdesk.startDate}"></h:inputText>
-  				 <f:convertDateTime locale="de_DE" pattern="dd.MM.yyyy" type="date"
-					dateStyle="short" timeZone="MET" />
-  			Ende Datum	<h:inputText value= "#{Helpdesk.endDate}"></h:inputText>
-  				 <f:convertDateTime locale="de_DE" pattern="dd.MM.yyyy" type="date"
-					dateStyle="short" timeZone="MET" />
-	   </h:panelGrid><p/>
-	  <h:commandButton value="Anfrage senden" actionListener= "#{Helpdesk.insertTicket}"/>
-	  <h:commandButton value="Update senden" actionListener= "#{Helpdesk.updateTicket}"/>
-</h:panelGrid><p/>
 
-  </ui:define>
-</ui:composition>
-	
+			<p />
+			<h:panelGrid columns="4">
+
+
+				<p />
+				<h:panelGrid columns="2">
+	  		Ticketnummer	<h:inputText value="#{Ticket.tNr}"></h:inputText>
+					<h:outputLabel value="Status:" for="id_status" />
+					<h:selectOneMenu id="id_status" onchange="form.submit()"
+						value="#{Ticket.statusID}"
+						valueChangeListener="#{mb.cbxChangeListener}">
+						<f:selectItems value="#{Ticket.status}">
+							<h:outputLabel value="Bearbeiter:" for="id_bearbeiter" />
+							<h:selectOneMenu id="id_bearbeiter" onchange="form.submit()"
+								value="#{Ticket.bearbeiterID}"
+								valueChangeListener="#{mb.cbxChangeListener}">
+								<f:selectItems value="#{Ticket.bearbeiter}">
+									<h:outputLabel value="Kategorie" for="id_kategorie" />
+									<h:selectOneMenu id="id_kategorie" onchange="form.submit()"
+										value="#{Ticket.kategorieID}"
+										valueChangeListener="#{mb.cbxChangeListener}">
+										<f:selectItems value="#{Ticket.kategorie}">
+	  		Grund			<h:inputText value="#{Ticket.grund}"></h:inputText>
+	  		Bemerkung		<h:inputText value="#{Ticket.bemerkung}"></h:inputText>
+				</h:panelGrid>
+				<p />
+
+				<p />
+				<h:panelGrid columns="3">
+					<h:outputLabel value="Anfrage:" for="id_anfrage" />
+					<h:selectOneMenu id="id_anfrage" onchange="form.submit()"
+						value="#{Ticket.anfrageID}"
+						valueChangeListener="#{mb.cbxChangeListener}">
+						<f:selectItems value="#{Ticket.anfrage}">
+					</h:selectOneMenu>&#160;
+  			Konfiguration: <h:inputText value="#{Ticket.rechner}"></h:inputText>
+					<h:commandButton value="Rechner Auswahl"
+						actionListener="#{Ticket.auswahl_Rechner}" />
+  			Start Datum	<h:inputText value="#{Ticket.startDate}"></h:inputText>
+					<f:convertDateTime locale="de_DE" pattern="dd.MM.yyyy" type="date"
+						dateStyle="short" timeZone="MET" />
+  			Ende Datum	<h:inputText value="#{Ticket.endDate}"></h:inputText>
+					<f:convertDateTime locale="de_DE" pattern="dd.MM.yyyy" type="date"
+						dateStyle="short" timeZone="MET" />
+				</h:panelGrid>
+				<p />
+				<h:commandButton value="Anfrage senden"
+					actionListener="#{Ticket.insertTicket}" />
+				<h:commandButton value="Update senden"
+					actionListener="#{Ticket.updateTicket}" />
+			</h:panelGrid>
+			<p />
+
+		</ui:define>
+	</ui:composition>
+
 </h:body>
 </html>
