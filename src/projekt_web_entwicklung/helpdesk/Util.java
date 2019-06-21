@@ -24,7 +24,7 @@ public class Util {
    */
   final static String DATABASE_BEAN_NAME = "mb_db";
   
-  private MDatabase mbDb = null;
+  private MbDb mbDb = null;
   
   /*--------------------------------------------------------------------------*/
   
@@ -37,7 +37,7 @@ public class Util {
    * @param con : Aktuelle DB-Verbindung
    */  
   public void closeConnection( Connection con ){
-    if( mbDb == null ) mbDb = (MDatabase) getBean( DATABASE_BEAN_NAME );
+    if( mbDb == null ) mbDb = (MbDb) getBean( DATABASE_BEAN_NAME );
     if( mbDb != null ) mbDb.closeConnection( con );
     else System.err.println( 
               "Util.closeConnection(): Fehler beim Schlieﬂen der Connection!" );
@@ -59,7 +59,7 @@ public class Util {
   /*--------------------------------------------------------------------------*/
   
   public void log( String s ) {
-  	if( mbDb == null ) mbDb = (MDatabase) getBean( DATABASE_BEAN_NAME );
+  	if( mbDb == null ) mbDb = (MbDb) getBean( DATABASE_BEAN_NAME );
     if( mbDb != null ) mbDb.log( s );
   }
   

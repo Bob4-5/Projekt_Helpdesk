@@ -14,7 +14,7 @@ import javax.inject.Named;
 import projekt_web_entwicklung.helpdesk.Util;
 import projekt_web_entwicklung.helpdesk.DbStatment;
 
-@Named("Helpdesk")
+@Named
 @SessionScoped
 public class Helpdesk implements Serializable  {
 	
@@ -38,8 +38,16 @@ public class Helpdesk implements Serializable  {
 		this.user= user;
 	}
 	
+	public String getUser() {
+		return user;
+	}
+	
 	public void setPwd(String pwd) {
 		this.pwd = pwd;
+	}
+	
+	public String getPwd() {
+		return pwd;
 	}
 	
 	public String checkLogin() {

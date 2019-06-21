@@ -1,18 +1,21 @@
+/*
+ * MbDb.java
+ * JSF 2.3
+ */
+
 package projekt_web_entwicklung.helpdesk;
 
 import static java.lang.System.*;
 
 /*
- * Die neueren Versionen des MySQL-Connectors haben einen Bug in der Klasse
+ * Einige ältere Versionen des MySQL-Connectors haben einen Bug in der Klasse
  * MysqlConnectionPoolDataSource, der dazu führt, dass kein Connect zu MariaDB
- * aufgebaut werden kann (außer der User hat kein Passwort) . Vgl. hier: 
+ * aufgebaut werden kann (außer der User verwendet kein Passwort) . Vgl. hier: 
  * https://mariadb.atlassian.net/browse/MDEV-5155
- * Ohne PW klappts. Großer Mist!
- * Workaround: Ältere Version des MySQL-Connectors einsetzen, z. B. 
- * mysql-connector-java-5.1.16-bin.jar.
+ * Ohne PW klappts.
+ * Workaround: Aktuelle Version des MySQL-Connectors einsetzen, z. B. 
+ * mysql-connector-java-8.0.13.jar.
  */
-//import com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource;
-//import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
 import com.mysql.cj.jdbc.MysqlDataSource;
 
@@ -40,13 +43,14 @@ import javax.faces.context.FacesContext;
  * in Eclipse hier: <code>Project | Properties | Java Build Path</code>
  *
  * @author Wolfgang Lang
- * @version 1.2.8, 2018-12-05
+ * @version 2019-06-13
  * @see     "Foliensatz zur Vorlesung"
  */
-public class MDatabase  implements Serializable {
+public class MbDb  implements Serializable {
 
   private static final long serialVersionUID = 1L;
-
+  private static final String TIMEZONE = "UTC";
+  
   private MysqlConnectionPoolDataSource mds_pool = null;
   private MysqlDataSource               mds      = null;
   
@@ -60,7 +64,7 @@ public class MDatabase  implements Serializable {
   
   /*--------------------------------------------------------------------------*/
   
-  public MDatabase() { 
+  public MbDb() { 
     log( "Creating net.lehre_online.db.MbDb at " + new Date() );
   }
   
@@ -91,7 +95,8 @@ public class MDatabase  implements Serializable {
         if( ! fn.exists() ) {
           File fParent = fn.getParentFile();
           if( fParent != null && (! fParent.exists()) ) {
-          	System.out.println( "Pfad " + fParent.getAbsolutePath() + " für Logfile wird angelegt..." );
+          	out.println( "Pfad " + fParent.getAbsolutePath() +
+          			                   " für Logfile wird angelegt..." );
           	fParent.mkdirs();
           }
         }
@@ -174,6 +179,7 @@ public class MDatabase  implements Serializable {
           mds_pool.setURL( constr ); 
           mds_pool.setUser( user ); mds_pool.setPassword( pw ); 
           mds_pool.setLogWriter( pwLog );
+          mds_pool.setServerTimezone( TIMEZONE );
         }
         
         if( mds_pool != null ){
@@ -186,6 +192,7 @@ public class MDatabase  implements Serializable {
         mds.setURL( constr );
         mds.setUser( user ); mds.setPassword( pw ); 
         mds.setLogWriter( pwLog );
+        mds.setServerTimezone( TIMEZONE );
         con = mds.getConnection();
         con.setAutoCommit( true );
       }

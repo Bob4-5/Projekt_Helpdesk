@@ -22,7 +22,7 @@
 
 	<managed-bean>
 		<managed-bean-name>mb_db</managed-bean-name>
-		<managed-bean-class>projekt_web_entwicklung.helpdesk.MDatabase</managed-bean-class>
+		<managed-bean-class>projekt_web_entwicklung.helpdesk.MbDb</managed-bean-class>
 		<managed-bean-scope>application</managed-bean-scope>
 
 		<managed-property>

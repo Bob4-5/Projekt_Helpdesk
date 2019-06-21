@@ -29,52 +29,59 @@ Ver. 2.3.0, 2017-07-03
 
 				<p />
 				<h:panelGrid columns="2">
-	  		Ticketnummer	<h:inputText value="#{Ticket.tNr}"></h:inputText>
-					<h:outputLabel value="Status:" for="id_status" />
+	  		Ticketnummer	<h:inputText value="#{Ticket.tNr}">
+	  						</h:inputText>
+			<h:outputLabel value="Status:" for="id_status" />
 					<h:selectOneMenu id="id_status" onchange="form.submit()"
 						value="#{Ticket.statusID}"
-						valueChangeListener="#{mb.cbxChangeListener}">
-						<f:selectItems value="#{Ticket.status}">
-							<h:outputLabel value="Bearbeiter:" for="id_bearbeiter" />
-							<h:selectOneMenu id="id_bearbeiter" onchange="form.submit()"
-								value="#{Ticket.bearbeiterID}"
-								valueChangeListener="#{mb.cbxChangeListener}">
-								<f:selectItems value="#{Ticket.bearbeiter}">
-									<h:outputLabel value="Kategorie" for="id_kategorie" />
-									<h:selectOneMenu id="id_kategorie" onchange="form.submit()"
-										value="#{Ticket.kategorieID}"
-										valueChangeListener="#{mb.cbxChangeListener}">
-										<f:selectItems value="#{Ticket.kategorie}">
-	  		Grund			<h:inputText value="#{Ticket.grund}"></h:inputText>
-	  		Bemerkung		<h:inputText value="#{Ticket.bemerkung}"></h:inputText>
+						valueChangeListener="#{Ticket.cbxChangeListener}">
+						<f:selectItems value="#{Ticket.status}" />
+					</h:selectOneMenu>
+			<h:outputLabel value="Bearbeiter:" for="id_bearbeiter" />
+					<h:selectOneMenu id="id_bearbeiter" onchange="form.submit()"
+						value="#{Ticket.userID}"
+						valueChangeListener="#{Ticket.cbxChangeListener}">
+						<f:selectItems value="#{Ticket.user}" />
+					</h:selectOneMenu>
+		   <h:outputLabel value="Kategorie" for="id_kategorie" />
+					<h:selectOneMenu id="id_kategorie" onchange="form.submit()"
+						value="#{Ticket.kategorieID}"
+						valueChangeListener="#{Ticket.cbxChangeListener}">
+						<f:selectItems value="#{Ticket.kategorie}" />
+					</h:selectOneMenu>
+	  		Grund			<h:inputText value="#{Ticket.grund}">
+	  						</h:inputText>
+	  		Bemerkung		<h:inputText value="#{Ticket.bemerkung}">
+	  						</h:inputText>
 				</h:panelGrid>
 				<p />
 
 				<p />
-				<h:panelGrid columns="3">
+				<h:panelGrid columns="2">
 					<h:outputLabel value="Anfrage:" for="id_anfrage" />
 					<h:selectOneMenu id="id_anfrage" onchange="form.submit()"
 						value="#{Ticket.anfrageID}"
-						valueChangeListener="#{mb.cbxChangeListener}">
-						<f:selectItems value="#{Ticket.anfrage}">
-					</h:selectOneMenu>&#160;
+						valueChangeListener="#{Ticket.cbxChangeListener}">
+						<f:selectItems value="#{Ticket.anfrage}" />
+					</h:selectOneMenu>
+					
   			Konfiguration: <h:inputText value="#{Ticket.rechner}"></h:inputText>
-					<h:commandButton value="Rechner Auswahl"
-						actionListener="#{Ticket.auswahl_Rechner}" />
-  			Start Datum	<h:inputText value="#{Ticket.startDate}"></h:inputText>
-					<f:convertDateTime locale="de_DE" pattern="dd.MM.yyyy" type="date"
-						dateStyle="short" timeZone="MET" />
-  			Ende Datum	<h:inputText value="#{Ticket.endDate}"></h:inputText>
-					<f:convertDateTime locale="de_DE" pattern="dd.MM.yyyy" type="date"
-						dateStyle="short" timeZone="MET" />
+  			Start Datum	<h:inputText value="#{Ticket.startDate}">
+						<f:convertDateTime locale="de_DE" pattern="dd.MM.yyyy" type="date"
+							dateStyle="short" timeZone="MET" />
+					</h:inputText>
+  			Ende Datum	<h:inputText value="#{Ticket.endDate}">
+						<f:convertDateTime locale="de_DE" pattern="dd.MM.yyyy" type="date"
+							dateStyle="short" timeZone="MET" />
+					</h:inputText>
 				</h:panelGrid>
 				<p />
-				<h:commandButton value="Anfrage senden"
+			</h:panelGrid>
+			<p />
+			<h:commandButton value="Anfrage senden"
 					actionListener="#{Ticket.insertTicket}" />
 				<h:commandButton value="Update senden"
 					actionListener="#{Ticket.updateTicket}" />
-			</h:panelGrid>
-			<p />
 
 		</ui:define>
 	</ui:composition>

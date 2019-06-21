@@ -1,6 +1,5 @@
 package projekt_web_entwicklung.helpdesk;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,6 +9,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
 import javax.inject.Named;
 import javax.faces.model.SelectItem;
 
@@ -42,6 +42,7 @@ public class Ticket implements Serializable  {
         System.out.println( "MyBean.<init>..."  );
         System.out.println( (new Date()).toString() ); 
         statment.connect();
+        //Hilfstabellen erstellen
         anfrage = statment.select_Hilfstabellen("anfrage");
         kategorie = statment.select_Hilfstabellen("kategorie");
         status = statment.select_Hilfstabellen("status");
@@ -144,6 +145,10 @@ public class Ticket implements Serializable  {
 	public void setEndDate(Date enddate) {
 		this.enddate = enddate;
 	}
+	
+	 public void cbxChangeListener( ValueChangeEvent vce ) {
+		    System.out.println( "cbxChangeListener: " + vce.getNewValue() );    
+		  }
 	
 	public void insertTicket(ActionEvent ae) {
 		try{

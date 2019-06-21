@@ -38,10 +38,10 @@ public class DbStatment implements Serializable {
 
 	/* Konstante Statments */
 
-	final String SQL_anfrage = "select  AnfrageNr,Name, Beschreibung from  anfrage";
-	final String SQL_kategorie = "select  KatNr,Name, Beschreibung from  anfrage";
-	final String SQL_status = "select AStatusID, Namem Beschreibung form astatus";
-	final String SQL_user = "select PersNr, Vorname, Nachname, Abteilung";
+	final String SQL_anfrage = "select AnfrageNr,Name, Beschreibung from anfrage";
+	final String SQL_kategorie = "select KatNr,Name, Beschreibung from kategorie";
+	final String SQL_status = "select AStatusID, Name, Beschreibung from astatus";
+	final String SQL_user = "select PersNr, Vorname, Nachname, Abteilung from bearbeiter";
 
 	public void connect() {
 
@@ -100,15 +100,20 @@ public class DbStatment implements Serializable {
 	}
 
 	private void selectStatemnt(String SQL_SELECT) {
-		try {
-			stm = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-			rs = stm.executeQuery(SQL_SELECT);
-		} catch (Exception ex) {
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "SQLException", ex.getLocalizedMessage()));
-			out.println("Error:  " + ex);
-			ex.printStackTrace();
-		}
+		if (connected) {
+			try {
+				stm = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+				rs = stm.executeQuery(SQL_SELECT);
+			} catch (Exception ex) {
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_ERROR, "SQLException", ex.getLocalizedMessage()));
+				out.println("Error:  " + ex);
+				ex.printStackTrace();
+			}	
+		}else {
+			FacesContext.getCurrentInstance().addMessage( null,
+					 new FacesMessage(FacesMessage.SEVERITY_ERROR,"Fehler.","Keine Datenkverbindung vorhanden."));
+		}	
 	}
 
 	public ArrayList<String> select_Rechner(){
@@ -122,31 +127,49 @@ public class DbStatment implements Serializable {
 	 */
 	public List<SelectItem> select_Hilfstabellen(String tabelle) {
 		List<SelectItem> z = new ArrayList<SelectItem>();
+		
 		try {
 			switch (tabelle) {
 			case "anfrage":
 				selectStatemnt(SQL_anfrage);
+				break;
 			case "kategorie":
 				selectStatemnt(SQL_kategorie);
+				break;
 			case "status":
-
 				selectStatemnt(SQL_status);
+				break;
 			case "user":
 				selectStatemnt(SQL_user);
+				break;
+			default:
+				FacesContext.getCurrentInstance().addMessage( null,
+						 new FacesMessage(FacesMessage.SEVERITY_ERROR,"Fehler.","Die Methode abgebrochen. Code: DbStatment"));
 			}
 
 			if (tabelle != "user") {
-				while (rs.next()) {
-					z.add(new SelectItem(rs.getString(1), rs.getString(2), rs.getString(3)));
+				if (rs != null) {
+					while (rs.next()) {
+						z.add(new SelectItem(rs.getString(1), rs.getString(2), rs.getString(3)));
+					}
+				}else {
+					z.add(new SelectItem("null", "null", "null"));
+					return z;
 				}
+					
 			} else {
-				while (rs.next()) {
-					z.add(new SelectItem(rs.getString(1),
-							rs.getString(2) + " " + rs.getString(3) + "-" + rs.getString(4),
-							"Wer sollte das bearbeiten"));
-				}
+				if (rs != null) {
+					while (rs.next()) {
+						z.add(new SelectItem(rs.getString(1),
+								rs.getString(2) + " " + rs.getString(3) + "-" + rs.getString(4),
+								"Wer sollte das bearbeiten"));
+					}
+				}else {
+					z.add(new SelectItem("null", "null", "null"));
+					return z;
+				}		
+					
 			}
-
 			rs.close();
 			return z;
 
@@ -156,8 +179,8 @@ public class DbStatment implements Serializable {
 			out.println("Error:  " + ex);
 			ex.printStackTrace();
 		}
-
-		return null;
+		z.add(new SelectItem("null", "null", "null"));
+		return z;
 	}
 
 	/*
