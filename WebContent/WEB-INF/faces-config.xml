@@ -45,12 +45,12 @@
 
 		<managed-property>
 			<property-name>constr</property-name>
-			<value>jdbc:mysql://localhost:3306/bibliothek</value>
+			<value>jdbc:mysql://localhost:3306/helpdesk</value>
 		</managed-property>
 
 		<managed-property>
 			<property-name>logfile</property-name>
-			<value>logs/tomcat8/browse.log</value>
+			<value>browse.log</value>
 		</managed-property>
 	</managed-bean>
 
