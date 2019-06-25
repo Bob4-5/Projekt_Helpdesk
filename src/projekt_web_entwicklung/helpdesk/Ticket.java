@@ -1,6 +1,10 @@
 package projekt_web_entwicklung.helpdesk;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -150,19 +154,34 @@ public class Ticket implements Serializable  {
 		    System.out.println( "cbxChangeListener: " + vce.getNewValue() );    
 		  }
 	
-	public void insertTicket(ActionEvent ae) {
-		Date startdatum = new Date();
+	public void insertTicket(ActionEvent ae) throws ParseException {
 		
+		//Startdatum wird automatisch ermittelt und in das rchtige Format konvertiert
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); 
+		String startString = format.format( new Date() );
+		
+		/*FacesContext.getCurrentInstance().addMessage( null,
+	   			 new FacesMessage(FacesMessage.SEVERITY_INFO,"O. K.", tNr +"_ "+
+	   			 statusID+"_ "+
+	   			 anfrageID+"_ "+
+	   			 rechner+"_ "+
+	   			 kategorieID+"_ "+ userID+"_ "+ grund +"_ "+bemerkung +"_ "+ startdate +"_ "+enddate));
+		*/
+		// übermittle die Angaben aus dem Objekt an die Statmentklasse
 		try{
 			statment.connect();
-			statment.insert_ticket(tNr, statusID, anfrageID, rechner, kategorieID, userID, grund, bemerkung,startdatum);
+			boolean st = statment.insert_ticket(tNr, statusID, anfrageID, rechner, kategorieID, userID, grund, bemerkung,startString);
+			if(st) {
+				FacesContext.getCurrentInstance().addMessage( null,
+			   			 new FacesMessage(FacesMessage.SEVERITY_INFO,"O. K.","Die Daten werden übernommen"));
+			}
 			statment.disconnect();
 		}catch(Exception e){
 			FacesContext.getCurrentInstance().addMessage( null,
-					 new FacesMessage(FacesMessage.SEVERITY_ERROR,"Fehler.","Die Es wurde die Methode abgebrochen."));
-		}
-		FacesContext.getCurrentInstance().addMessage( null,
-   			 new FacesMessage(FacesMessage.SEVERITY_INFO,"O. K.","Die Daten werden übernommen"));
+					 new FacesMessage(FacesMessage.SEVERITY_ERROR,"Fehler.",e.getLocalizedMessage()));
+					 e.printStackTrace();			 
+		}	 
     }
     
     public void updateTicket(ActionEvent ae) {

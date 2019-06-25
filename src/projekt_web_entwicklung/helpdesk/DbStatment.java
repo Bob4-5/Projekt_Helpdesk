@@ -7,9 +7,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Date;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.enterprise.context.SessionScoped;
@@ -98,7 +98,7 @@ public class DbStatment implements Serializable {
 		}
 		return null;
 	}
-
+	// allgemeines Select Statment. es bekommt über SQL_SELECT das ausführbare Statment übermittelt
 	private void selectStatemnt(String SQL_SELECT) {
 		if (connected) {
 			try {
@@ -115,7 +115,8 @@ public class DbStatment implements Serializable {
 					 new FacesMessage(FacesMessage.SEVERITY_ERROR,"Fehler.","Keine Datenkverbindung vorhanden."));
 		}	
 	}
-
+	
+	// Konfigurationsdaten der einzelenen Klassen abrufen
 	public ArrayList<String> select_Rechner(){
 		ArrayList<String> r = new ArrayList<String>();
 		return r; 
@@ -167,8 +168,7 @@ public class DbStatment implements Serializable {
 				}else {
 					z.add(new SelectItem("null", "null", "null"));
 					return z;
-				}		
-					
+				}				
 			}
 			rs.close();
 			return z;
@@ -186,35 +186,33 @@ public class DbStatment implements Serializable {
 	/*
 	 * Ticketdatensatz normalisiert einfügen
 	 */
-	public void insert_ticket(int tNr, int status, int anfrage, int rechner, int kategorie, int user, String grund,
-			String bemerkung, Date startDate) {
-
+	public boolean insert_ticket(int tNr, int status, int anfrage, int rechner, int kategorie, int user, String grund,
+			String bemerkung, String startDate) {
+		
+			
 		if (connected) {
 			try {
 				// if( ps == null ){
 				String sQl = "INSERT  INTO  ticket(  "
-						+ "TicketNr,PersNr_FK, Rechner_FK, Status_FK, Bemerkung, Kategorie, Problem, Anfrage,StartDate)  "
-						+ "VALUES  (  ?,  ?,  ?,  ?,  ?, ?, ?, ?, ?)";
+						+ "PersNr_FK, Rechner_FK, Status_FK, Bemerkung, Kategorie, Problem, Anfrage,StartDate) "
+						+ "VALUES  ( ?,  ?,  ?,  ?, ?, ?, ?, ?)";
 				PreparedStatement ps = con.prepareStatement(sQl);
 				// }
-
-				ps.setInt(1, tNr);
-				ps.setInt(2, status);
-				ps.setInt(3, anfrage);
-				ps.setInt(4, rechner);
+				
+				ps.setInt(1, user);
+				ps.setInt(2, rechner);
+				ps.setInt(3, status);
+				ps.setString(4, bemerkung);
 				ps.setInt(5, kategorie);
-				ps.setInt(6, user);
-				ps.setString(7, grund);
-				ps.setString(8, bemerkung);
-				ps.setDate(9, (java.sql.Date) startDate);
-
+				ps.setString(6, grund);
+				ps.setInt(7, anfrage);
+				ps.setDate(8,  Date.valueOf(startDate));
+				
 				int n = ps.executeUpdate();
 				if (n == 1) {
-					out.println("O.K.,	Datensatz  eingefügt.");
-					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
-							"O.  K.", "Ein  Datensatz  erfolgreich  eingefügt."));
-				}
-				ps.close();
+					ps.close();
+					return true;
+				}	
 
 			} catch (SQLException ex) {
 				FacesContext.getCurrentInstance().addMessage(null,
@@ -223,5 +221,15 @@ public class DbStatment implements Serializable {
 				ex.printStackTrace();
 			}
 		}
+		return false;
+	}
+	// Update des Ticketdatensatzes
+	public boolean update_ticket() {
+		
+		return false;
+	}
+	
+	public void select_ticket(int ticketNr) {
+		
 	}
 }
