@@ -187,14 +187,14 @@ public class DbStatment implements Serializable {
 	 * Ticketdatensatz normalisiert einfügen
 	 */
 	public void insert_ticket(int tNr, int status, int anfrage, int rechner, int kategorie, int user, String grund,
-			String bemerkung, Date startDate, Date endDate) {
+			String bemerkung, Date startDate) {
 
 		if (connected) {
 			try {
 				// if( ps == null ){
 				String sQl = "INSERT  INTO  ticket(  "
-						+ "TicketNr,PersNr_FK, Rechner_FK, Status_FK, Bemerkung, Kategorie, Problem, Anfrage,StartDate, EndDate)  "
-						+ "VALUES  (  ?,  ?,  ?,  ?,  ?, ?, ?, ?, ?, ? )";
+						+ "TicketNr,PersNr_FK, Rechner_FK, Status_FK, Bemerkung, Kategorie, Problem, Anfrage,StartDate)  "
+						+ "VALUES  (  ?,  ?,  ?,  ?,  ?, ?, ?, ?, ?)";
 				PreparedStatement ps = con.prepareStatement(sQl);
 				// }
 
@@ -207,7 +207,6 @@ public class DbStatment implements Serializable {
 				ps.setString(7, grund);
 				ps.setString(8, bemerkung);
 				ps.setDate(9, (java.sql.Date) startDate);
-				ps.setDate(10, (java.sql.Date) endDate);
 
 				int n = ps.executeUpdate();
 				if (n == 1) {

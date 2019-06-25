@@ -151,8 +151,12 @@ public class Ticket implements Serializable  {
 		  }
 	
 	public void insertTicket(ActionEvent ae) {
+		Date startdatum = new Date();
+		
 		try{
-			statment.insert_ticket(tNr, statusID, anfrageID, rechner, kategorieID, userID, grund, bemerkung, startdate, enddate);
+			statment.connect();
+			statment.insert_ticket(tNr, statusID, anfrageID, rechner, kategorieID, userID, grund, bemerkung,startdatum);
+			statment.disconnect();
 		}catch(Exception e){
 			FacesContext.getCurrentInstance().addMessage( null,
 					 new FacesMessage(FacesMessage.SEVERITY_ERROR,"Fehler.","Die Es wurde die Methode abgebrochen."));
