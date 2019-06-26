@@ -45,7 +45,7 @@
 
 		<managed-property>
 			<property-name>constr</property-name>
-			<value>jdbc:mysql://localhost:3306/helpdesk</value>
+			<value>jdbc:mysql://home-server.syno-ds.de:3307/helpdesk</value>
 		</managed-property>
 
 		<managed-property>

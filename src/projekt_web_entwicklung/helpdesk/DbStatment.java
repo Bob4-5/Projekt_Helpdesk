@@ -77,15 +77,16 @@ public class DbStatment implements Serializable {
 			}
 		}
 	}
-	
+
 	public List<String> selectUser(String username) {
 		List<String> bkennung = new ArrayList();
 		String statment = "select username, passwort from bearbeiter where username = " + username;
 		selectStatemnt(statment);
-		
+
 		try {
 			if (rs.first()) {
-				if (rs.isLast()) return null;
+				if (rs.isLast())
+					return null;
 				bkennung.add(rs.getNString(1));
 				bkennung.add(rs.getString(2));
 				return bkennung;
@@ -98,7 +99,9 @@ public class DbStatment implements Serializable {
 		}
 		return null;
 	}
-	// allgemeines Select Statment. es bekommt über SQL_SELECT das ausführbare Statment übermittelt
+
+	// allgemeines Select Statment. es bekommt über SQL_SELECT das ausführbare
+	// Statment übermittelt
 	private void selectStatemnt(String SQL_SELECT) {
 		if (connected) {
 			try {
@@ -109,26 +112,25 @@ public class DbStatment implements Serializable {
 						new FacesMessage(FacesMessage.SEVERITY_ERROR, "SQLException", ex.getLocalizedMessage()));
 				out.println("Error:  " + ex);
 				ex.printStackTrace();
-			}	
-		}else {
-			FacesContext.getCurrentInstance().addMessage( null,
-					 new FacesMessage(FacesMessage.SEVERITY_ERROR,"Fehler.","Keine Datenkverbindung vorhanden."));
-		}	
+			}
+		} else {
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler.", "Keine Datenkverbindung vorhanden."));
+		}
 	}
-	
+
 	// Konfigurationsdaten der einzelenen Klassen abrufen
-	public ArrayList<String> select_Rechner(){
+	public ArrayList<String> select_Rechner() {
 		ArrayList<String> r = new ArrayList<String>();
-		return r; 
+		return r;
 	}
-	
-	
+
 	/*
 	 * Hilfstabellen mit Daten füllen
 	 */
 	public List<SelectItem> select_Hilfstabellen(String tabelle) {
 		List<SelectItem> z = new ArrayList<SelectItem>();
-		
+
 		try {
 			switch (tabelle) {
 			case "anfrage":
@@ -144,8 +146,8 @@ public class DbStatment implements Serializable {
 				selectStatemnt(SQL_user);
 				break;
 			default:
-				FacesContext.getCurrentInstance().addMessage( null,
-						 new FacesMessage(FacesMessage.SEVERITY_ERROR,"Fehler.","Die Methode abgebrochen. Code: DbStatment"));
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+						"Fehler.", "Die Methode abgebrochen. Code: DbStatment"));
 			}
 
 			if (tabelle != "user") {
@@ -153,11 +155,11 @@ public class DbStatment implements Serializable {
 					while (rs.next()) {
 						z.add(new SelectItem(rs.getString(1), rs.getString(2), rs.getString(3)));
 					}
-				}else {
+				} else {
 					z.add(new SelectItem("null", "null", "null"));
 					return z;
 				}
-					
+
 			} else {
 				if (rs != null) {
 					while (rs.next()) {
@@ -165,10 +167,10 @@ public class DbStatment implements Serializable {
 								rs.getString(2) + " " + rs.getString(3) + "-" + rs.getString(4),
 								"Wer sollte das bearbeiten"));
 					}
-				}else {
+				} else {
 					z.add(new SelectItem("null", "null", "null"));
 					return z;
-				}				
+				}
 			}
 			rs.close();
 			return z;
@@ -188,8 +190,7 @@ public class DbStatment implements Serializable {
 	 */
 	public boolean insert_ticket(int tNr, int status, int anfrage, int rechner, int kategorie, int user, String grund,
 			String bemerkung, String startDate) {
-		
-			
+
 		if (connected) {
 			try {
 				// if( ps == null ){
@@ -198,7 +199,7 @@ public class DbStatment implements Serializable {
 						+ "VALUES  ( ?,  ?,  ?,  ?, ?, ?, ?, ?)";
 				PreparedStatement ps = con.prepareStatement(sQl);
 				// }
-				
+
 				ps.setInt(1, user);
 				ps.setInt(2, rechner);
 				ps.setInt(3, status);
@@ -206,13 +207,13 @@ public class DbStatment implements Serializable {
 				ps.setInt(5, kategorie);
 				ps.setString(6, grund);
 				ps.setInt(7, anfrage);
-				ps.setDate(8,  Date.valueOf(startDate));
-				
+				ps.setDate(8, Date.valueOf(startDate));
+
 				int n = ps.executeUpdate();
 				if (n == 1) {
 					ps.close();
 					return true;
-				}	
+				}
 
 			} catch (SQLException ex) {
 				FacesContext.getCurrentInstance().addMessage(null,
@@ -223,13 +224,34 @@ public class DbStatment implements Serializable {
 		}
 		return false;
 	}
+
 	// Update des Ticketdatensatzes
 	public boolean update_ticket() {
-		
+
 		return false;
 	}
-	
-	public void select_ticket(int ticketNr) {
+
+	public List<String> select_ticket(int ticketNr) {
+		List<String> data = new ArrayList<String>();
 		
+		String sqlStatment = "Select PersNr_FK, Rechner_FK, Status_FK, Bemerkung, Kategorie, Problem, Anfrage,StartDate,EndDate";
+		selectStatemnt(sqlStatment);
+		try {
+			data.add(1, rs.getString(1));
+			data.add(2,rs.getString(2));
+			data.add(3, rs.getString(1));
+			data.add(4, rs.getString(3));
+			data.add(5, rs.getString(4));
+			data.add(6,rs.getString(5));
+			data.add(7, rs.getString(6));
+			data.add(8,rs.getString(7));
+			data.add(9,rs.getString(8));
+			data.add(10, rs.getString(9));
+			data.add(10, rs.getString(10));
+		}catch(SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+		return data;
 	}
 }
