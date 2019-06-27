@@ -53,7 +53,58 @@ public class Ticket implements Serializable  {
         user = statment.select_Hilfstabellen("user");
         statment.disconnect();
 	}
+	
+	 public void preRenderAction()  { 
+		 List<String> data = new ArrayList<String>();
+		 
+		 
+		 
+		 System.out.println( "MyBean.preRenderAction"  ); 
+	 } 
 
+
+	
+	 public void cbxChangeListener( ValueChangeEvent vce ) {
+		    System.out.println( "cbxChangeListener: " + vce.getNewValue() );    
+		  }
+	
+	public void insertTicket(ActionEvent ae) throws ParseException {
+		
+		//Startdatum wird automatisch ermittelt und in das rchtige Format konvertiert
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); 
+		String startString = format.format( new Date() );
+		
+		// übermittle die Angaben aus dem Objekt an die Statmentklasse
+		try{
+			statment.connect();
+			boolean st = statment.insert_ticket(tNr, statusID, anfrageID, rechner, kategorieID, userID, grund, bemerkung,startString);
+			if(st) {
+				FacesContext.getCurrentInstance().addMessage( null,
+			   			 new FacesMessage(FacesMessage.SEVERITY_INFO,"O. K.","Die Daten werden übernommen"));
+			}
+			statment.disconnect();
+		}catch(Exception e){
+			FacesContext.getCurrentInstance().addMessage( null,
+					 new FacesMessage(FacesMessage.SEVERITY_ERROR,"Fehler.",e.getLocalizedMessage()));
+					 e.printStackTrace();			 
+		}	 
+    }
+    
+    public void updateTicket(ActionEvent ae) {
+    	/* hier erfolgt der Tranfer der Daten wieder zurück in die Datenbank
+    	 * außerdem erfolgt die Weiterleitung zur Startseite wieder
+    	 */
+    	FacesContext.getCurrentInstance().addMessage( null,
+   			 new FacesMessage(FacesMessage.SEVERITY_INFO,"O. K.","Die Daten werden gupdatet"));
+    }
+    
+    public void auswahl_Rechner(ActionEvent ae) {
+    	/*hier muss die Weiterleitung zur Seite Rechner erfolgen 
+    	 * außerdem ein Event um den Rechner zu übernehmen.
+    	 */
+    }
+    
 	public List<SelectItem> getStatus() {
 		return status;
 	}
@@ -149,52 +200,4 @@ public class Ticket implements Serializable  {
 	public void setEndDate(Date enddate) {
 		this.enddate = enddate;
 	}
-	
-	 public void cbxChangeListener( ValueChangeEvent vce ) {
-		    System.out.println( "cbxChangeListener: " + vce.getNewValue() );    
-		  }
-	
-	public void insertTicket(ActionEvent ae) throws ParseException {
-		
-		//Startdatum wird automatisch ermittelt und in das rchtige Format konvertiert
-		
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); 
-		String startString = format.format( new Date() );
-		
-		/*FacesContext.getCurrentInstance().addMessage( null,
-	   			 new FacesMessage(FacesMessage.SEVERITY_INFO,"O. K.", tNr +"_ "+
-	   			 statusID+"_ "+
-	   			 anfrageID+"_ "+
-	   			 rechner+"_ "+
-	   			 kategorieID+"_ "+ userID+"_ "+ grund +"_ "+bemerkung +"_ "+ startdate +"_ "+enddate));
-		*/
-		// übermittle die Angaben aus dem Objekt an die Statmentklasse
-		try{
-			statment.connect();
-			boolean st = statment.insert_ticket(tNr, statusID, anfrageID, rechner, kategorieID, userID, grund, bemerkung,startString);
-			if(st) {
-				FacesContext.getCurrentInstance().addMessage( null,
-			   			 new FacesMessage(FacesMessage.SEVERITY_INFO,"O. K.","Die Daten werden übernommen"));
-			}
-			statment.disconnect();
-		}catch(Exception e){
-			FacesContext.getCurrentInstance().addMessage( null,
-					 new FacesMessage(FacesMessage.SEVERITY_ERROR,"Fehler.",e.getLocalizedMessage()));
-					 e.printStackTrace();			 
-		}	 
-    }
-    
-    public void updateTicket(ActionEvent ae) {
-    	/* hier erfolgt der Tranfer der Daten wieder zurück in die Datenbank
-    	 * außerdem erfolgt die Weiterleitung zur Startseite wieder
-    	 */
-    	FacesContext.getCurrentInstance().addMessage( null,
-   			 new FacesMessage(FacesMessage.SEVERITY_INFO,"O. K.","Die Daten werden gupdatet"));
-    }
-    
-    public void auswahl_Rechner(ActionEvent ae) {
-    	/*hier muss die Weiterleitung zur Seite Rechner erfolgen 
-    	 * außerdem ein Event um den Rechner zu übernehmen.
-    	 */
-    }
 }

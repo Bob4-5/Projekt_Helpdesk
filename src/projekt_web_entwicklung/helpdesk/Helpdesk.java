@@ -33,6 +33,15 @@ public class Helpdesk implements Serializable  {
 	
 	private String user = "";
 	private String pwd = "";
+	private int userID = 1;
+	
+	public void setUserID(int userID) {
+		this.userID= userID;
+	}
+	
+	public int getUserID() {
+		return userID;
+	}
 	
 	public void setUser(String user) {
 		this.user= user;

@@ -42,6 +42,7 @@ public class DbStatment implements Serializable {
 	final String SQL_kategorie = "select KatNr,Name, Beschreibung from kategorie";
 	final String SQL_status = "select AStatusID, Name, Beschreibung from astatus";
 	final String SQL_user = "select PersNr, Vorname, Nachname, Abteilung from bearbeiter";
+	final String SQL_ticket = "Select TicketNr, PersNr_FK, Rechner_FK, Status_FK, Bemerkung, Kategorie, Problem, Anfrage,StartDate,EndDate from ticket";
 
 	public void connect() {
 
@@ -81,7 +82,7 @@ public class DbStatment implements Serializable {
 	public List<String> selectUser(String username) {
 		List<String> bkennung = new ArrayList();
 		String statment = "select username, passwort from bearbeiter where username = " + username;
-		selectStatemnt(statment);
+		selectStatment(statment);
 
 		try {
 			if (rs.first()) {
@@ -102,7 +103,7 @@ public class DbStatment implements Serializable {
 
 	// allgemeines Select Statment. es bekommt über SQL_SELECT das ausführbare
 	// Statment übermittelt
-	private void selectStatemnt(String SQL_SELECT) {
+	private void selectStatment(String SQL_SELECT) {
 		if (connected) {
 			try {
 				stm = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -134,16 +135,16 @@ public class DbStatment implements Serializable {
 		try {
 			switch (tabelle) {
 			case "anfrage":
-				selectStatemnt(SQL_anfrage);
+				selectStatment(SQL_anfrage);
 				break;
 			case "kategorie":
-				selectStatemnt(SQL_kategorie);
+				selectStatment(SQL_kategorie);
 				break;
 			case "status":
-				selectStatemnt(SQL_status);
+				selectStatment(SQL_status);
 				break;
 			case "user":
-				selectStatemnt(SQL_user);
+				selectStatment(SQL_user);
 				break;
 			default:
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
@@ -231,27 +232,68 @@ public class DbStatment implements Serializable {
 		return false;
 	}
 
-	public List<String> select_ticket(int ticketNr) {
+	// einzelnes Ticket auslesen
+	public List<String> select_one_ticket(int ticketNr) {
 		List<String> data = new ArrayList<String>();
+		// String vorbereiten und ausführen lassen
 		
-		String sqlStatment = "Select PersNr_FK, Rechner_FK, Status_FK, Bemerkung, Kategorie, Problem, Anfrage,StartDate,EndDate";
-		selectStatemnt(sqlStatment);
+		String sqlStatment = SQL_ticket + " where TicketNr = " + ticketNr ;
+		selectStatment(sqlStatment);
+		// fülle die das ResultSet in die Liste als String --> konvertierung passiert im Ticket
 		try {
-			data.add(1, rs.getString(1));
-			data.add(2,rs.getString(2));
-			data.add(3, rs.getString(1));
-			data.add(4, rs.getString(3));
-			data.add(5, rs.getString(4));
-			data.add(6,rs.getString(5));
-			data.add(7, rs.getString(6));
-			data.add(8,rs.getString(7));
-			data.add(9,rs.getString(8));
-			data.add(10, rs.getString(9));
-			data.add(10, rs.getString(10));
-		}catch(SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			if(rs.next()) {
+				if (!rs.isLast()) return null;
+				
+				data.add(1, rs.getString(1));
+				data.add(2,rs.getString(2));
+				data.add(3, rs.getString(1));
+				data.add(4, rs.getString(3));
+				data.add(5, rs.getString(4));
+				data.add(6,rs.getString(5));
+				data.add(7, rs.getString(6));
+				data.add(8,rs.getString(7));
+				data.add(9,rs.getString(8));
+				data.add(10, rs.getString(9));
+				data.add(10, rs.getString(10));
+				rs.close();
+				return data;
+			}
+			
+		}catch(SQLException ex) {
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "SQLException", ex.getLocalizedMessage()));
+			out.println("Error:  " + ex);
+			ex.printStackTrace();
 		}	
-		return data;
+		return null;
+	}
+	// Baue eine Liste von Tickets auf, damit eine Tabelle aufgebaut werden kann.
+	
+	public ArrayList<Ticket> select__all_ticket(int userFK){
+		ArrayList<Ticket> daten = new ArrayList<Ticket>();
+		
+		String sqlStatment = SQL_ticket + "where PersNr_FK = " + userFK;
+		selectStatment(sqlStatment);
+		try {
+			while (rs.next()) {
+				Ticket ticket = new Ticket();
+				ticket.settNr(rs.getInt(1));
+				ticket.setUserID(rs.getInt(2));
+				ticket.setRechner(rs.getInt(3));
+				ticket.setStatusID(rs.getInt(4));
+				ticket.setBemerkung(rs.getString(5));
+				ticket.setAnfrageID(rs.getInt(6));
+				ticket.setKategorieID(rs.getInt(7));
+				ticket.setGrund(rs.getString(8));
+				daten.add(ticket);
+			}
+			rs.close();
+		}catch(SQLException ex) {
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "SQLException", ex.getLocalizedMessage()));
+			out.println("Error:  " + ex);
+			ex.printStackTrace();
+		}
+		return daten;
 	}
 }

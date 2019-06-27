@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE html>
+
+<!-- ===========================================================================
+client_hallo.xhtml - Zweite Client Seite, die nach dem Click auf den Button 
+                     in der Start Seite angezeigt wird                    
+============================================================================ -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+ 
+<h:head></h:head>
+
+<h:body>
+	<ui:composition template="/masterLayout.xhtml">
+
+		<ui:define name="title">Startseite</ui:define>
+
+		<ui:define name="content">
+		
+	<p:dataTable emptyMessage="Keine Daten"  
+			value     = "#{helpdesk.tdm}" var="ticket" 
+			sortBy    = "#{ticket.tNr}" 
+			selection = "#{helpdesk.selectedTicket}">
+		
+		<p:column headerText    = "Auswahl"
+				   selectionMode = "single"/>
+		
+	</p:dataTable>
+			
+		</ui:define>
+	</ui:composition>
+
+</h:body>
+</html>
