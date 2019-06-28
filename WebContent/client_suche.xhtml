@@ -22,10 +22,6 @@ client_suche.xhtml - Seite für die Suche nach Tickets
   
       <p>Hallo #{myBean.name}</p>
         <p>Heute ist 
-        <h:outputText value="#{myBean.date}">
-          <f:convertDateTime timeZone="MET" locale="de_DE" 
-                             dateStyle="full" type="both"/>
-        </h:outputText></p>
       
       <p><h:commandButton value="Zurück" action="client_start"/></p>
       

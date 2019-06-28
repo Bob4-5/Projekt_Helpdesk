@@ -21,17 +21,15 @@ client_hallo.xhtml - Zweite Client Seite, die nach dem Click auf den Button
 		<ui:define name="title">Startseite</ui:define>
 
 		<ui:define name="content">
-		
-	<p:dataTable emptyMessage="Keine Daten"  
-			value     = "#{helpdesk.tdm}" var="ticket" 
-			sortBy    = "#{ticket.tNr}" 
-			selection = "#{helpdesk.selectedTicket}">
-		
-		<p:column headerText    = "Auswahl"
-				   selectionMode = "single"/>
-		
-	</p:dataTable>
+		<p:dataTable emptyMessage="Keine Daten" 
+					value     = "#{bearbeiter.all}" var="ticket" >
+			<p:column headerText    = "Ticket"
+				   selectionMode = "single">
+				   <h:outputText value="#{ticket.tNr}"/>
+			</p:column>
 			
+		</p:dataTable>
+		
 		</ui:define>
 	</ui:composition>
 

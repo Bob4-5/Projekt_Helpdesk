@@ -8,7 +8,6 @@ import java.util.List;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 
 import projekt_web_entwicklung.helpdesk.Util;
@@ -27,7 +26,7 @@ public class Helpdesk implements Serializable  {
 	 * Sie enthält die Login Routine und ist außerdem der Vermittler für den User
 	 */
 	public Helpdesk() {
-        System.out.println( "MyBean.<init>..."  );
+        System.out.println( "Anlegen der von Helpdesk" );
         System.out.println( (new Date()).toString() ); 
 	}
 	

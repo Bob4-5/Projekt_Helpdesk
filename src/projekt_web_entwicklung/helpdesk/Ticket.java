@@ -1,10 +1,8 @@
 package projekt_web_entwicklung.helpdesk;
 
 import java.io.Serializable;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,7 +17,7 @@ import javax.faces.model.SelectItem;
 
 import projekt_web_entwicklung.helpdesk.DbStatment;
 
-@Named("Ticket")
+@Named
 @SessionScoped
 public class Ticket implements Serializable  {
 	
@@ -43,7 +41,7 @@ public class Ticket implements Serializable  {
 	private List<SelectItem> user = new ArrayList<SelectItem>();
 	
 	public Ticket() {
-        System.out.println( "MyBean.<init>..."  );
+        System.out.println( "Ticket wird erstellt");
         System.out.println( (new Date()).toString() ); 
         statment.connect();
         //Hilfstabellen erstellen
@@ -55,7 +53,7 @@ public class Ticket implements Serializable  {
 	}
 	
 	 public void preRenderAction()  { 
-		 List<String> data = new ArrayList<String>();
+		// List<String> data = new ArrayList<String>();
 		 
 		 
 		 
@@ -91,12 +89,28 @@ public class Ticket implements Serializable  {
 		}	 
     }
     
-    public void updateTicket(ActionEvent ae) {
+    public void updateTicket() {
     	/* hier erfolgt der Tranfer der Daten wieder zurück in die Datenbank
-    	 * außerdem erfolgt die Weiterleitung zur Startseite wieder
+    	 *
     	 */
-    	FacesContext.getCurrentInstance().addMessage( null,
-   			 new FacesMessage(FacesMessage.SEVERITY_INFO,"O. K.","Die Daten werden gupdatet"));
+    	String endString;
+    	
+    	if(statusID == 3) {
+    		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); 
+    		endString = format.format( new Date() );
+    	}else {
+    		endString = null;
+    	}
+    	try {
+    		statment.connect();
+    		statment.update_ticket(tNr, statusID, anfrageID, rechner, kategorieID, userID, grund, bemerkung,endString);
+    		statment.disconnect();
+    	}catch(Exception e) {
+    		FacesContext.getCurrentInstance().addMessage( null,
+					 new FacesMessage(FacesMessage.SEVERITY_ERROR,"Fehler.",e.getLocalizedMessage()));
+					 e.printStackTrace();
+    	}
+    	// Weiterleitung zur Startseite
     }
     
     public void auswahl_Rechner(ActionEvent ae) {

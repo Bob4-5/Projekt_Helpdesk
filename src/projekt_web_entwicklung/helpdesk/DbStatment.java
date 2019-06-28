@@ -20,8 +20,6 @@ import javax.inject.Named;
 
 import projekt_web_entwicklung.helpdesk.Util;
 
-@Named("DbStatment")
-@SessionScoped
 public class DbStatment implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -227,9 +225,45 @@ public class DbStatment implements Serializable {
 	}
 
 	// Update des Ticketdatensatzes
-	public boolean update_ticket() {
-
-		return false;
+	public void update_ticket(int tNr, int status, int anfrage, int rechner, int kategorie, int user, String grund,
+			String bemerkung, String endString) {
+		Date endDate = null;
+		if(endString != null) endDate= Date.valueOf(endString);
+		
+		try {
+			PreparedStatement  ps  =  con.prepareStatement(  "UPDATE  ticket  SET  "  +
+			"PersNr_FK  =  ?,  Rechner_FK  =  ?,  Status_FK  =  ?,  Bemerkung  =  ?, Kategorie= ?, Problem= ?, Anfrage= ?,StartDate= ?" +
+			"WHERE   TicketNr =  ?"  ); 
+		
+			ps.setInt(1, user);
+			ps.setInt(2, rechner);
+			ps.setInt(3, status);
+			ps.setString(4, bemerkung);
+			ps.setInt(5, kategorie);
+			ps.setString(6, grund);
+			ps.setInt(7, anfrage);
+			ps.setDate(8, endDate);
+			ps.setInt	(9, tNr);
+			
+			int  n  =  ps.executeUpdate(); 
+			if( n == 1 ) {
+				out.println(  "O.K.,	Datensatz  geändert.");
+				FacesContext.getCurrentInstance().addMessage(  null,  new  FacesMessage(
+						FacesMessage.SEVERITY_INFO,  "O.  K.", "Datensatz  wurde  erfolgreich  geändert."  ));
+			}else  if(  n  ==  0  )  {
+				out.println(  "Keine  Änderung!!");
+				FacesContext.getCurrentInstance().addMessage(  null,  new  FacesMessage(
+				FacesMessage.SEVERITY_WARN,  "Datensatz  nicht  geändert!",
+				"PK-Änderung  nicht  erlaubt."  ));
+			}
+			ps.close();
+		}catch(  SQLException  ex  )  {
+			FacesContext.getCurrentInstance().addMessage(  null,  new  FacesMessage(
+			FacesMessage.SEVERITY_ERROR,  "SQLException",  ex.getLocalizedMessage())
+			);
+			out.println(  "Error:  "  +  ex  );
+			ex.printStackTrace();
+			}
 	}
 
 	// einzelnes Ticket auslesen
@@ -269,22 +303,22 @@ public class DbStatment implements Serializable {
 	}
 	// Baue eine Liste von Tickets auf, damit eine Tabelle aufgebaut werden kann.
 	
-	public ArrayList<Ticket> select__all_ticket(int userFK){
+	public ArrayList<Ticket> select_all_ticket(int userFK){
 		ArrayList<Ticket> daten = new ArrayList<Ticket>();
-		
-		String sqlStatment = SQL_ticket + "where PersNr_FK = " + userFK;
+		System.out.println(userFK);
+		String sqlStatment = SQL_ticket + " where PersNr_FK = " + userFK;
 		selectStatment(sqlStatment);
 		try {
 			while (rs.next()) {
 				Ticket ticket = new Ticket();
-				ticket.settNr(rs.getInt(1));
-				ticket.setUserID(rs.getInt(2));
-				ticket.setRechner(rs.getInt(3));
-				ticket.setStatusID(rs.getInt(4));
-				ticket.setBemerkung(rs.getString(5));
-				ticket.setAnfrageID(rs.getInt(6));
-				ticket.setKategorieID(rs.getInt(7));
-				ticket.setGrund(rs.getString(8));
+				ticket.settNr(rs.getInt("TicketNr"));
+				ticket.setUserID(rs.getInt("PersNr_FK"));
+				ticket.setRechner(rs.getInt("Rechner_FK"));
+				ticket.setStatusID(rs.getInt("Status_FK"));
+				ticket.setBemerkung(rs.getString("Bemerkung"));
+				ticket.setKategorieID(rs.getInt("Kategorie"));
+				ticket.setAnfrageID(rs.getInt("Anfrage"));
+				ticket.setGrund(rs.getString("Problem"));
 				daten.add(ticket);
 			}
 			rs.close();
