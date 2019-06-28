@@ -12,11 +12,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
-import javax.inject.Named;
 
 import projekt_web_entwicklung.helpdesk.Util;
 
@@ -78,7 +76,7 @@ public class DbStatment implements Serializable {
 	}
 
 	public List<String> selectUser(String username) {
-		List<String> bkennung = new ArrayList();
+		List<String> bkennung = new ArrayList<String>();
 		String statment = "select username, passwort from bearbeiter where username = " + username;
 		selectStatment(statment);
 
@@ -303,14 +301,15 @@ public class DbStatment implements Serializable {
 	}
 	// Baue eine Liste von Tickets auf, damit eine Tabelle aufgebaut werden kann.
 	
-	public ArrayList<Ticket> select_all_ticket(int userFK){
-		ArrayList<Ticket> daten = new ArrayList<Ticket>();
+	public List<Ticket> select_all_ticket(int userFK){
+		List<Ticket> daten = new ArrayList<Ticket>();
 		System.out.println(userFK);
 		String sqlStatment = SQL_ticket + " where PersNr_FK = " + userFK;
 		selectStatment(sqlStatment);
 		try {
 			while (rs.next()) {
 				Ticket ticket = new Ticket();
+				System.out.println("Ticket Nr: "+ rs.getInt("TicketNr"));
 				ticket.settNr(rs.getInt("TicketNr"));
 				ticket.setUserID(rs.getInt("PersNr_FK"));
 				ticket.setRechner(rs.getInt("Rechner_FK"));

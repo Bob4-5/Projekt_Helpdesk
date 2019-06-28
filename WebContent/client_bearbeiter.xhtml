@@ -23,11 +23,25 @@ client_hallo.xhtml - Zweite Client Seite, die nach dem Click auf den Button
 		<ui:define name="content">
 		<p:dataTable emptyMessage="Keine Daten" 
 					value     = "#{bearbeiter.all}" var="ticket" >
-			<p:column headerText    = "Ticket"
-				   selectionMode = "single">
-				   <h:outputText value="#{ticket.tNr}"/>
+			 <p:column headerText="TicketNr" sortBy="tNr">	   
+	    		<h:commandLink value="#{ticket.tNr}" 
+	    					   action="bearbeiter.xhtml">
+	     			 <f:setPropertyActionListener value="#{ticket.tNr}"
+	                                  			 target="#{ticket.tNr}"/>
+	     		</h:commandLink>
+	  		</p:column>
+			<p:column headerText="Ticket" sortBy="#{ticket.anfrageID}">
+			    <h:outputText value="#{ticket.anfrageID}"/>
 			</p:column>
-			
+			<p:column headerText="Grund" sortBy="#{ticket.grund}">
+			    <h:outputText value="#{ticket.grund}"/>
+			</p:column>
+			<p:column headerText="Bemerkung">
+			    <h:outputText value="#{ticket.bemerkung}"/>
+			</p:column>
+			<p:column headerText="Ticket">
+			    <h:outputText value="#{ticket.grund}"/>
+			</p:column>
 		</p:dataTable>
 		
 		</ui:define>

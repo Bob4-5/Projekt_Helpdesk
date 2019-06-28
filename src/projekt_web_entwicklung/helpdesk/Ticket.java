@@ -68,7 +68,7 @@ public class Ticket implements Serializable  {
 	
 	public void insertTicket(ActionEvent ae) throws ParseException {
 		
-		//Startdatum wird automatisch ermittelt und in das rchtige Format konvertiert
+		//Startdatum wird automatisch ermittelt und in das richtige Format konvertiert
 		
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); 
 		String startString = format.format( new Date() );

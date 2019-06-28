@@ -1,15 +1,16 @@
 package projekt_web_entwicklung.helpdesk;
 
-import java.util.ArrayList;
-
+import java.util.List;
 import javax.faces.model.ListDataModel;
-
 import org.primefaces.model.SelectableDataModel;
 
 public class TicketDataModel extends ListDataModel<Ticket> implements SelectableDataModel<Ticket> {
 	  
-	public TicketDataModel(ArrayList<Ticket> alTicket) {
-		 super(alTicket);
+	  public TicketDataModel() {}
+	
+	public TicketDataModel(List<Ticket> data) {
+		super(data);
+		System.out.println("in der Model kommt folgendes an:"+ data.get(0).gettNr());
 	}
 
 	@Override
