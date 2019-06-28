@@ -302,6 +302,7 @@ public class DbStatment implements Serializable {
 	// Baue eine Liste von Tickets auf, damit eine Tabelle aufgebaut werden kann.
 	
 	public List<Ticket> select_all_ticket(int userFK){
+		// anpassen des Tickets --> join einbauen
 		List<Ticket> daten = new ArrayList<Ticket>();
 		System.out.println(userFK);
 		String sqlStatment = SQL_ticket + " where PersNr_FK = " + userFK;
