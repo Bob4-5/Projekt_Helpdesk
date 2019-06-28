@@ -9,7 +9,7 @@ public class TicketDataModel extends ListDataModel<Ticket> implements Selectable
 	  public TicketDataModel() {}
 	
 	public TicketDataModel(List<Ticket> data) {
-		super(data);
+		super(data );
 		System.out.println("in der Model kommt folgendes an:"+ data.get(0).gettNr());
 	}
 

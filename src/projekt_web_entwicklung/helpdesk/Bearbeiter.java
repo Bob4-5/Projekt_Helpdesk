@@ -32,7 +32,7 @@ public class Bearbeiter implements Serializable {
 		System.out.println("Bearbeiter.getAll()");
 		try{
 			statment.connect();
-			alTicket = statment.select_all_ticket(1); //helpdesk.getUserID()
+			alTicket = statment.select_all_ticket(1); // helpdesk.getUserID()
 			statment.disconnect();
 			
 			int groesse =  alTicket.size();
