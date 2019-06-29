@@ -15,17 +15,32 @@ client_suche.xhtml - Seite für die Suche nach Tickets
 
 <h:body>
 <ui:composition template="/masterLayout.xhtml">
-  
-  <ui:define name="title">Hallo</ui:define>
 
-  <ui:define name="content">
+	<ui:define name="title">Suche</ui:define>
+
+		<ui:define name="content">
+  <p />
   
-      <p>Hallo #{myBean.name}</p>
-        <p>Heute ist 
+   <h:panelGrid columns="2">
+	  		Ticketnummer	<h:inputText value="">
+	  						</h:inputText>
+			Name 			<h:inputText value="">
+	  						</h:inputText>
+	  		Grund			<h:inputText value="">
+	  						</h:inputText>
+	  		Bemerkung		<h:inputText value="">
+	  						</h:inputText>
+				</h:panelGrid>
       
-      <p><h:commandButton value="Zurück" action="client_start"/></p>
+      <p><h:commandButton value="Zurück" action="client_helpdesk"/></p>
       
-  </ui:define>
+
+
+
+
+
+</ui:define>
+
 </ui:composition>
 
 </h:body>
