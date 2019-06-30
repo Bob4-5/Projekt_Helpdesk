@@ -25,7 +25,7 @@ client_hallo.xhtml - Zweite Client Seite, die nach dem Click auf den Button
 					value     = "#{bearbeiter.all}" var="ticket" >
 			 <p:column headerText="TicketNr" sortBy="tNr">	   
 	    		<h:commandLink value="#{ticket.tNr}" 
-	    					   action="bearbeiter.xhtml">
+	    					   action="client_ticket.xhtml">
 	     			 <f:setPropertyActionListener value="#{ticket.tNr}"
 	                                  			 target="#{ticket.tNr}"/>
 	     		</h:commandLink>

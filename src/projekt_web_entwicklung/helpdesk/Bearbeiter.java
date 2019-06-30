@@ -11,6 +11,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
+import projekt_web_entwicklung.helpdesk.Util;
+
 @Named
 @SessionScoped
 public class Bearbeiter implements Serializable {
@@ -20,7 +22,8 @@ public class Bearbeiter implements Serializable {
 	
 	private List<Ticket> alTicket = new ArrayList<Ticket>();
 	private TicketDataModel tdm = null;
-	
+	private Util util = new Util();
+	private Helpdesk hd = (Helpdesk) util.getBean("helpdesk");
 	
 	public Bearbeiter() {
 			System.out.println("Anlegen der von Bearbeiter");
@@ -32,7 +35,7 @@ public class Bearbeiter implements Serializable {
 		System.out.println("Bearbeiter.getAll()");
 		try{
 			statment.connect();
-			alTicket = statment.select_all_ticket(1); // helpdesk.getUserID()
+			alTicket = statment.select_all_ticket(hd.getUserID());
 			statment.disconnect();
 			
 			int groesse =  alTicket.size();
