@@ -32,7 +32,7 @@ public class Helpdesk implements Serializable  {
 	
 	private String user = "";
 	private String pwd = "";
-	private int userID = 1;
+	private int userID;
 	
 	public void setUserID(int userID) {
 		this.userID= userID;
@@ -61,7 +61,7 @@ public class Helpdesk implements Serializable  {
 	public String checkLogin() {
 		if (checkPwd()) {
 			if (user == "admin") return "admin";
-			else return user;
+			else return "client_bearbeiter.xhtml";
 			
 		}else {
 			FacesContext.getCurrentInstance().addMessage( null,
@@ -72,16 +72,27 @@ public class Helpdesk implements Serializable  {
 	
 	private boolean checkPwd() {
 		List<String> daten = new ArrayList<String>();
+		statment.connect();
 		daten= statment.selectUser(user);
+		statment.disconnect();
+		
+		if (daten == null) {
+			FacesContext.getCurrentInstance().addMessage( null,
+					 new FacesMessage(FacesMessage.SEVERITY_ERROR,"Fehler.","Der Benutzer exestiert in der Datenbank nicht."));
+		}
 		
 		if (daten.isEmpty()) return false;
-		if (util.cryptpw(user, pwd) == daten.get(1))return true;
+		if (pwd.equals(daten.get(2))) { //util.cryptpw(user, pwd) == daten.get(2)
+			this.user = daten.get(1);
+			this.userID = Integer.valueOf(daten.get(0));
+			return true;
+		}
+		//return false;
 		return false;
 	}
 	
-	private void sessionSetzen() {
-		/* 
-		 * ToDo: hier muss die Session gesetzt werden
-		 */
+	public String userAnlegen() {
+		System.out.println("userAnlegen()");
+		return "client_userAnlegen.xhtml";
 	}
 }

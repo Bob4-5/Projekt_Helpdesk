@@ -35,12 +35,15 @@ public class Bearbeiter implements Serializable {
 		System.out.println("Bearbeiter.getAll()");
 		try{
 			statment.connect();
-			alTicket = statment.select_all_ticket(hd.getUserID());
+			alTicket = statment.select_all_ticket(hd.getUserID()); //
 			statment.disconnect();
 			
 			int groesse =  alTicket.size();
+			for(int n=0;n <= alTicket.size()-1;n++) {
+				alTicket.get(n).toString();
+			}
 			System.out.println("es gibt folgende Tickets" + groesse);
-			System.out.println("Ticket Nr: hat folgendes Nummer:"+ alTicket.get(0).gettNr());
+			System.out.println("Ticket Nr: hat folgende Nummer:"+ alTicket.get(0).gettNr());
 			tdm = new TicketDataModel(alTicket);
 			return tdm;
 		}catch(Exception e){
