@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE html>
-<head></head>
-
 
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -12,23 +10,32 @@
 
 <h:body>
 <ui:composition template="/masterLayout.xhtml">
-<meta charset="ISO-8859-1">
+<meta charset="ISO-8859-1">	</meta>
 	<ui:define name="title">Suche</ui:define>
 
 		<ui:define name="content">
   <p />
 
- 	<panelGrid columns="2">
+ 	<panelGrid columns="2" rows="4">
 	  		Tickets aktuell:<h:outputText value="">
 	  						</h:outputText>
-			davon offen:	<h:inputText value="">
+	  						 <p />
+  
+			davon offen:	<h:outputText value="">
 	  						</h:outputText>
+	  						 <p />
+  
 	  		davon wartend:	<h:outputText value="">
 	  						</h:outputText>
+	  						 <p />
+  
 	  		davon geschlossen:<h:outputText value="">
 	  						</h:outputText>
+	  						 <p />
+  
 				</panelGrid>
 				
-		</ui:define>		
+		</ui:define>	
+		</ui:composition>
 </h:body>
 </html>
