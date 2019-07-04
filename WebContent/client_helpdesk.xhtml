@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 
 <!-- ===========================================================================
-client_hallo.xhtml - Zweite Client Seite, die nach dem Click auf den Button 
+client_helpdesk.xhtml - Zweite Client Seite, die nach dem Click auf den Button 
                      in der Start Seite angezeigt wird                    
 ============================================================================ -->
 
@@ -39,13 +39,16 @@ client_hallo.xhtml - Zweite Client Seite, die nach dem Click auf den Button
 						requiredMessage="Passwort fehlt" size="40">
 						<f:validateLength minimum="4" />
 					</h:inputSecret>
-
+			
 				</h:panelGrid>
 			</h:panelGroup>
-
+		<h:form>
+					<h:commandButton value = "Zum User anlegen" action ="client_userAnlegen.xhtml">
+					</h:commandButton>
+	    	</h:form>
 
 		</ui:define>
 	</ui:composition>
-
+	
 </h:body>
 </html>

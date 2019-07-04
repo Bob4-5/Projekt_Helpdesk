@@ -3,8 +3,7 @@
 <!DOCTYPE html>
 
 <!-- ===========================================================================
-client_hallo.xhtml - Zweite Client Seite, die nach dem Click auf den Button 
-                     in der Start Seite angezeigt wird                    
+client_bearbeiter.xhtml - die Seite die vorhandenen Tickets für den Benutzer an.                    
 ============================================================================ -->
 
 <html xmlns="http://www.w3.org/1999/xhtml"
@@ -15,7 +14,7 @@ client_hallo.xhtml - Zweite Client Seite, die nach dem Click auf den Button
  
 <h:head></h:head>
 
-<h:body>
+<h:body><h:form>
 	<ui:composition template="/masterLayout.xhtml">
 
 		<ui:define name="title">Startseite</ui:define>
@@ -26,26 +25,14 @@ client_hallo.xhtml - Zweite Client Seite, die nach dem Click auf den Button
 			 <p:column headerText="TicketNr" sortBy="tNr">	   
 	    		<h:commandLink value="#{ticket.tNr}" 
 	    					   action="client_ticket.xhtml">
-	     			 <f:setPropertyActionListener value="#{ticket.tNr}"
-	                                  			 target="#{ticket.tNr}"/>
+	     			 <f:setPropertyActionListener value= "1"
+	                                  			 target="#{ticket.paramter}"/>
 	     		</h:commandLink>
 	  		</p:column>
-			<p:column headerText="Ticket" sortBy="#{ticket.anfrageID}">
-			    <h:outputText value="#{ticket.anfrageID}"/>
-			</p:column>
-			<p:column headerText="Grund">
-			    <h:outputText value="#{ticket.grund}"/>
-			</p:column>
-			<p:column headerText="Bemerkung">
-			    <h:outputText value="#{ticket.bemerkung}"/>
-			</p:column>
-			<p:column headerText="Ticket">
-			    <h:outputText value="#{ticket.grund}"/>
-			</p:column>
+			
 		</p:dataTable>
 		
 		</ui:define>
 	</ui:composition>
-
-</h:body>
+</h:form></h:body>
 </html>

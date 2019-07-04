@@ -19,7 +19,7 @@ Ver. 2.3.0, 2017-07-03
 
 	<ui:composition template="/masterLayout.xhtml">
 
-		<ui:define name="title">TickNr: #{ticket.tNr}</ui:define>
+		<ui:define name="title">#{ticket.anzeige}</ui:define>
 
 		<ui:define name="content">
 
@@ -29,7 +29,7 @@ Ver. 2.3.0, 2017-07-03
 
 				<p />
 				<h:panelGrid columns="2">
-	  		ticketnummer	<h:inputText value="#{ticket.tNr}">
+	  		Ticketnummer	<h:inputText value="#{ticket.tNr}">
 	  						</h:inputText>
 			<h:outputLabel value="Status:" for="id_status" />
 					<h:selectOneMenu id="id_status" onchange="form.submit()"
@@ -64,7 +64,7 @@ Ver. 2.3.0, 2017-07-03
 						<f:selectItems value="#{ticket.anfrage}" />
 					</h:selectOneMenu>
 					
-  			Konfiguration: <h:inputText value="#{ticket.rechner}"></h:inputText>
+  			Konfiguration: <h:inputText value="#{ticket.rechnerID}"></h:inputText>
   			Start Datum	<h:inputText value="#{ticket.startDate}">
 						<f:convertDateTime locale="de_DE" pattern="dd.MM.yyyy" type="date"
 							dateStyle="short" timeZone="MET" />

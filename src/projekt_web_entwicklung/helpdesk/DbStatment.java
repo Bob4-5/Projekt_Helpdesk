@@ -38,7 +38,7 @@ public class DbStatment implements Serializable {
 	final String SQL_kategorie = "select KatNr,Name, Beschreibung from kategorie";
 	final String SQL_status = "select AStatusID, Name, Beschreibung from astatus";
 	final String SQL_user = "select PersNr, Vorname, Nachname, Abteilung from bearbeiter";
-	final String SQL_ticket = "Select TicketNr, PersNr_FK, Rechner_FK, Status_FK, Bemerkung, Kategorie, Problem, Anfrage,StartDate,EndDate from ticket";
+	final String SQL_ticket = "Select TicketNr, PersNr_FK, Rechner_FK,  Anfrage,  Status_FK, Kategorie, Problem, Bemerkung, StartDate,EndDate from ticket";
 
 	public void connect() {
 
@@ -62,7 +62,7 @@ public class DbStatment implements Serializable {
 				if (rs != null)
 					rs.close();
 				if (stm != null)
-					stm.close();
+					stm.close(); 
 
 				util.closeConnection(con);
 				connected = false;
@@ -74,19 +74,21 @@ public class DbStatment implements Serializable {
 			}
 		}
 	}
-
+	// user wird ermittelt
 	public List<String> selectUser(String username) {
 		List<String> bkennung = new ArrayList<String>();
-		String statment = "select username, passwort from bearbeiter where username = " + username;
+		String statment = "select persnr, username, passwort from bearbeiter where username = " + "'"+ username +"'";
 		selectStatment(statment);
-
+// !!! Daten noch anpassen!
 		try {
+			if (!rs.next()) return null; 
 			if (rs.first()) {
-				if (rs.isLast())
-					return null;
-				bkennung.add(rs.getNString(1));
-				bkennung.add(rs.getString(2));
-				return bkennung;
+				if (rs.isLast()) {
+					bkennung.add(rs.getString(1));// ID
+					bkennung.add(rs.getNString(2));// Username
+					bkennung.add(rs.getString(3));// Passwort
+					return bkennung;	
+				}	
 			}
 		} catch (SQLException ex) {
 			FacesContext.getCurrentInstance().addMessage(null,
@@ -181,6 +183,40 @@ public class DbStatment implements Serializable {
 		z.add(new SelectItem("null", "null", "null"));
 		return z;
 	}
+	
+	 
+		public boolean insert_user( String vorname, String nachname, String abteilung, String user, String pwd ) {
+
+			if (connected) {
+				try {
+					// if( ps == null ){
+					String sQl = "INSERT  INTO  ticket(  Vorname, Nachname, Abteilung, Username, Passwort) "
+							+ "VALUES  ( ?,  ?,  ?,  ?, ?)";
+					PreparedStatement ps = con.prepareStatement(sQl);
+					// }
+
+					ps.setString(1, vorname);
+					ps.setString(2, nachname);
+					ps.setString(3, abteilung);
+					ps.setString(4, user);
+					ps.setString(5, pwd);
+				
+					int n = ps.executeUpdate();
+					if (n == 1) {
+						ps.close();
+						return true;
+					}
+
+				} catch (SQLException ex) {
+					FacesContext.getCurrentInstance().addMessage(null,
+							new FacesMessage(FacesMessage.SEVERITY_ERROR, "SQLException", ex.getLocalizedMessage()));
+					out.println("Error:  " + ex);
+					ex.printStackTrace();
+				}
+			}
+			return false;
+		}
+
 
 	/*
 	 * Ticketdatensatz normalisiert einfügen
@@ -269,24 +305,24 @@ public class DbStatment implements Serializable {
 		List<String> data = new ArrayList<String>();
 		// String vorbereiten und ausführen lassen
 		
-		String sqlStatment = SQL_ticket + " where TicketNr = " + ticketNr ;
+		String sqlStatment = SQL_ticket + " where TicketNr = "  + ticketNr;
 		selectStatment(sqlStatment);
 		// fülle die das ResultSet in die Liste als String --> konvertierung passiert im Ticket
 		try {
 			if(rs.next()) {
 				if (!rs.isLast()) return null;
 				
-				data.add(1, rs.getString(1));
-				data.add(2,rs.getString(2));
-				data.add(3, rs.getString(1));
-				data.add(4, rs.getString(3));
-				data.add(5, rs.getString(4));
-				data.add(6,rs.getString(5));
-				data.add(7, rs.getString(6));
-				data.add(8,rs.getString(7));
-				data.add(9,rs.getString(8));
-				data.add(10, rs.getString(9));
-				data.add(10, rs.getString(10));
+				data.add(0, rs.getString(1));
+				data.add(1,rs.getString(2));
+				data.add(2, rs.getString(3));
+				data.add(3, rs.getString(4));
+				data.add(4, rs.getString(5));
+				data.add(5,rs.getString(6));
+				data.add(6, rs.getString(7));
+				data.add(7,rs.getString(8));
+				data.add(8,rs.getString(9));
+				if(rs.wasNull()) data.add(9, rs.getString(10));
+				else data.add(9,"null");
 				rs.close();
 				return data;
 			}
@@ -313,7 +349,7 @@ public class DbStatment implements Serializable {
 				System.out.println("Ticket Nr: "+ rs.getInt("TicketNr"));
 				ticket.settNr(rs.getInt("TicketNr"));
 				ticket.setUserID(rs.getInt("PersNr_FK"));
-				ticket.setRechner(rs.getInt("Rechner_FK"));
+				ticket.setRechnerID(rs.getInt("Rechner_FK"));
 				ticket.setStatusID(rs.getInt("Status_FK"));
 				ticket.setBemerkung(rs.getString("Bemerkung"));
 				ticket.setKategorieID(rs.getInt("Kategorie"));

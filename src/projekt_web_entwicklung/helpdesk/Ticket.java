@@ -27,9 +27,10 @@ public class Ticket implements Serializable  {
 	private int tNr;
 	private int statusID;
 	private int anfrageID;
-	private int rechner;
+	private int rechnerID;
 	private int kategorieID;
 	private int userID;
+	private String anzeige;
 	private String grund; 
 	private String bemerkung;
 	private Date startdate;
@@ -43,6 +44,14 @@ public class Ticket implements Serializable  {
 	public Ticket() {
         System.out.println( "Ticket wird erstellt");
         System.out.println( (new Date()).toString() ); 
+        
+        if (tNr == 0) setAnzeige("Neues Ticket");
+         	
+        	/*
+        	 * FacesContext.getCurrentInstance().addMessage( null,
+        	 * 		new FacesMessage(FacesMessage.SEVERITY_INFO,"Paramter","Der Paramter " + tNr + " wurde übergeben"));
+        	 */			 
+        
         statment.connect();
         //Hilfstabellen erstellen
         anfrage = statment.select_Hilfstabellen("anfrage");
@@ -51,16 +60,21 @@ public class Ticket implements Serializable  {
         user = statment.select_Hilfstabellen("user");
         statment.disconnect();
 	}
+	@Override
+	public String toString() {
+		return tNr + ", "+ statusID
+				+ ", "+ anfrageID
+				+ ", "+ rechnerID
+				+ ", "+ kategorieID
+				+ ", "+ userID
+				+ ", "+ grund
+				+ ", "+ bemerkung;
+				
+	}
 	
 	 public void preRenderAction()  { 
-		// List<String> data = new ArrayList<String>();
-		 
-		 
-		 
-		 System.out.println( "MyBean.preRenderAction"  ); 
+		 System.out.println( "Ticket.preRenderAction"  ); 
 	 } 
-
-
 	
 	 public void cbxChangeListener( ValueChangeEvent vce ) {
 		    System.out.println( "cbxChangeListener: " + vce.getNewValue() );    
@@ -76,7 +90,7 @@ public class Ticket implements Serializable  {
 		// übermittle die Angaben aus dem Objekt an die Statmentklasse
 		try{
 			statment.connect();
-			boolean st = statment.insert_ticket(tNr, statusID, anfrageID, rechner, kategorieID, userID, grund, bemerkung,startString);
+			boolean st = statment.insert_ticket(tNr, statusID, anfrageID, rechnerID, kategorieID, userID, grund, bemerkung,startString);
 			if(st) {
 				FacesContext.getCurrentInstance().addMessage( null,
 			   			 new FacesMessage(FacesMessage.SEVERITY_INFO,"O. K.","Die Daten werden übernommen"));
@@ -103,7 +117,7 @@ public class Ticket implements Serializable  {
     	}
     	try {
     		statment.connect();
-    		statment.update_ticket(tNr, statusID, anfrageID, rechner, kategorieID, userID, grund, bemerkung,endString);
+    		statment.update_ticket(tNr, statusID, anfrageID, rechnerID, kategorieID, userID, grund, bemerkung,endString);
     		statment.disconnect();
     	}catch(Exception e) {
     		FacesContext.getCurrentInstance().addMessage( null,
@@ -112,6 +126,49 @@ public class Ticket implements Serializable  {
     	}
     	// Weiterleitung zur Startseite
     }
+    
+    public void setParamter(String tNrString) {
+    	System.out.println("Start Methode parmeterAnnahme()");
+    	
+    	List<String> data = new ArrayList<String>();
+   	 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+   	 	
+   	 	int vt = Integer.parseInt(tNrString);
+         
+         try {
+        	 statment.connect();
+             data = statment.select_one_ticket(vt);
+             statment.disconnect();
+             
+             if(data == null) {
+            	 FacesContext.getCurrentInstance().addMessage( null,
+    					 new FacesMessage(FacesMessage.SEVERITY_ERROR,"Fehler.","Zu diesem Ticket exestieren keine Daten"));
+    				
+             }
+             
+            // if(!data.get(9).equals("null")) {
+            //	 System.out.println("Der Wert ist: "+ data.get(9));
+            // }
+             
+             this.tNr = Integer.parseInt(data.get(0));
+             this.userID = Integer.parseInt(data.get(1));
+             this.rechnerID = Integer.parseInt(data.get(2));
+             this.anfrageID = Integer.parseInt(data.get(3));
+             this.statusID = Integer.parseInt(data.get(4));
+             this.kategorieID = Integer.parseInt(data.get(5));
+             this.grund = data.get(6);
+             this.bemerkung = data.get(7);
+             this.startdate = sdf.parse(data.get(8));
+             if(!data.get(9).equals("null")) this.enddate = sdf.parse(data.get(9)); 
+             setAnzeige("Ticket Nr: "+ tNr);  
+             
+         }catch (Exception e) {
+        	 FacesContext.getCurrentInstance().addMessage( null,
+					 new FacesMessage(FacesMessage.SEVERITY_ERROR,"setParamter: ",e.getLocalizedMessage()));
+					 e.printStackTrace();
+         }
+    }
+
     
     public void auswahl_Rechner(ActionEvent ae) {
     	/*hier muss die Weiterleitung zur Seite Rechner erfolgen 
@@ -159,12 +216,12 @@ public class Ticket implements Serializable  {
 		this.anfrageID = anfrageID;
 	}
 	
-	public int getRechner() {
-		return rechner;
+	public int getRechnerID() {
+		return rechnerID;
 	}
 	
-	public void setRechner(int rechner) {
-		this.rechner = rechner;
+	public void setRechnerID(int rechnerID) {
+		this.rechnerID = rechnerID;
 	}
 	
 	public int getKategorieID() {
@@ -213,5 +270,11 @@ public class Ticket implements Serializable  {
     
 	public void setEndDate(Date enddate) {
 		this.enddate = enddate;
+	}
+	public String getAnzeige() {
+		return anzeige;
+	}
+	public void setAnzeige(String anzeige) {
+		this.anzeige = anzeige;
 	}
 }

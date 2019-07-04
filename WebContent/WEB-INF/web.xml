@@ -11,7 +11,7 @@
                             http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	id="WebApp_ID" version="3.1">
 
-	<display-name>JSF 2.3 Vorlage, Last update: 2017-07-13</display-name>
+	<display-name>Helpdesk Anwendung für ein Ticket System</display-name>
 	<description>Konfigationsdatei zur Anzeige der 1. Seite
 	</description>
 

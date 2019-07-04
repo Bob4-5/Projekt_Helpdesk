@@ -65,7 +65,7 @@ public class MbDb  implements Serializable {
   /*--------------------------------------------------------------------------*/
   
   public MbDb() { 
-    log( "Creating net.lehre_online.db.MbDb at " + new Date() );
+    log( "Creating projekt_web_entwicklung.helpdesk at " + new Date() );
   }
   
   /*--------------------------------------------------------------------------*/
