@@ -342,6 +342,22 @@ public class DbStatment implements Serializable {
 		List<Ticket> daten = new ArrayList<Ticket>();
 		System.out.println(userFK);
 		String sqlStatment = SQL_ticket + " where PersNr_FK = " + userFK;
+		
+		String temp = "Select ticket.TicketNr, "
+						+ "astatus.Name as Status,"
+						+ " kategorie.Name as Kategorie ,"
+						+ "anfrage.Name as Anfrage,"
+						+ "ticket.Problem,"
+						+ "ticket.Bemerkung,"
+						+ "ticket.StartDate "
+						+ "from ticket"
+						+ "inner join kategorie"
+						+ "on helpdesk.ticket.Kategorie = helpdesk.kategorie.KatNr"
+						+ "inner join anfrage"
+						+ "on helpdesk.ticket.Anfrage = helpdesk.anfrage.AnfrageNr"
+						+ "inner join astatus"
+						+ "on ticket.Status_FK = astatus.AStatusID";
+		
 		selectStatment(sqlStatment);
 		try {
 			while (rs.next()) {
