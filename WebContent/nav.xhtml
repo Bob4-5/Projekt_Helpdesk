@@ -4,26 +4,30 @@
 <!-- ===========================================================================
 nav.xhtml - navigation bar Seite        
 ============================================================================ -->
-                      
+
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
- 
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
 <h:head></h:head>
 
 <h:body>
+	<h:form>
 
-  <div class="nav">
-  <h:panelGrid id="panel" columns="4">
-  <h:commandButton value="Ticket" action="client_ticket"/>
-  
-  <h:commandButton value="Suche" action="client_suche"/>
-  <h:commandButton value="Statistik" action="client_statistik"/>
-  
-  
-  </h:panelGrid>
-  
-  </div>
+		<div class="nav">
 
+
+			<p:tabMenu activeIndex="#{mb.activeIndex}">
+			
+				<p:menuitem value="Home" outcome="client_helpdesk" ajax="false" />
+				<p:menuitem value="Ticket" outcome="client_ticket.xhtml" />
+				<p:menuitem value="Suche" outcome="client_suche.xhtml" />
+				<p:menuitem value="Statistik" outcome="client_statistik.xhtml" />
+			</p:tabMenu>
+
+		</div>
+
+	</h:form>
 </h:body>
 
 </html>

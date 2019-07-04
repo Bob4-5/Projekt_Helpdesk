@@ -22,34 +22,6 @@ client_hallo.xhtml - Zweite Client Seite, die nach dem Click auf den Button
 		<ui:define name="content">
 		
 		
-		
-		
-		
-		<h:panelGrid id="panel" columns="2" border="1" cellpadding="10"
-			cellspacing="1">
-
-			<f:facet name="header">
-				<h:outputText value="Login" />
-			</f:facet>
-			
-			<h:inputSecret />
-			<h:outputLabel value="Username" />
-			<h:inputText id="id_name" label="Name" value="#{myBean.name}"
-				required="true" size="50" title="Name und Passwort eingeben und Button klicken" />
-
-			<h:outputLabel value="Password" />
-			<h:inputSecret id="id_password" label="Passwort" value=""
-				required="true" size="50" title="Name und Passwort eingeben und Button klicken" />
-
-			<f:facet name="footer">
-				<h:panelGroup style="display:block; text-align:center">
-					<h:commandButton id="login" value="Login" />
-					
-					
-				</h:panelGroup>
-			</f:facet>
-		</h:panelGrid>
-		
 
 
 			<!-- ==========================  Login  ===============================  -->
