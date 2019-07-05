@@ -29,12 +29,15 @@ client_suche.xhtml - Seite für die Suche nach Tickets
 	  						</h:inputText>
 	  		Grund			<h:inputText >
 	  						</h:inputText>
-	  		Bemerkung		<h:inputText >
+	  		RechnerNr		<h:inputText >
 	  						</h:inputText>
-				</h:panelGrid>
-      <p><h:commandButton value="Suchen"/></p>
-      <p><h:commandButton value="Zurück" action="client_helpdesk"/></p>
-      
+	  		Zeitraum von	<h:inputText >
+	  						</h:inputText>
+	  		Zeitraum bis	<h:inputText >
+	  						</h:inputText>
+      <p><h:commandButton value="Suchen" actionListener="#{suche.selectTicket}"/></p>
+      <p><h:commandButton value="Zurück" action="client_bearbeiter"/></p>
+      </h:panelGrid>
       <p:dataTable emptyMessage="Keine Daten" 
 					value     = "#{suche.all}" var="ticket" >
 			 <p:column headerText="TicketNr" sortBy="tNr">	   

@@ -63,7 +63,7 @@ Ver. 2.3.0, 2017-07-03
 						valueChangeListener="#{ticket.cbxChangeListener}">
 						<f:selectItems value="#{ticket.anfrage}" />
 					</h:selectOneMenu>
-					
+			Rechner		<h:commandButton value="Auswählen" action="#{ticket.toPopup}"/>		
   			Konfiguration: <h:inputText value="#{ticket.rechnerID}"></h:inputText>
   			Start Datum	<h:inputText value="#{ticket.startDate}">
 						<f:convertDateTime locale="de_DE" pattern="dd.MM.yyyy" type="date"
@@ -78,9 +78,9 @@ Ver. 2.3.0, 2017-07-03
 			</h:panelGrid>
 			<p />
 			<h:commandButton value="Speichern/neu"
-					actionListener="#{ticket.insertTicket}" action= "client_bearbeiter.xhtml" />
+					actionListener="#{ticket.insertTicket}" action= "client_bearbeiter.xhtml" rendered="#{ticket.speichernI}" />
 				<h:commandButton value="Speichern/Vorhanden"
-					actionListener="#{ticket.updateTicket}" action= "client_bearbeiter.xhtml"/>
+					actionListener="#{ticket.updateTicket}" action= "client_bearbeiter.xhtml" rendered="#{ticket.speichernU}"/>
 				<h:commandButton value="Abbrechen"
 					actionListener="#{ticket.back}" action="client_bearbeiter.xhtml" />
 		</ui:define>

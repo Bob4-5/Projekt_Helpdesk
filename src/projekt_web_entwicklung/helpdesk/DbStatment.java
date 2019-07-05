@@ -81,6 +81,7 @@ public class DbStatment implements Serializable {
 		selectStatment(statment);
 // !!! Daten noch anpassen!
 		try {
+			if( !connected) return null;
 			if (!rs.next()) return null; 
 			if (rs.first()) {
 				if (rs.isLast()) {
@@ -335,6 +336,61 @@ public class DbStatment implements Serializable {
 		}	
 		return null;
 	}
+	// Liste die bei der Suche zurück kommt.
+	public List<Ticket> suche_all_ticket( String suche){
+		// anpassen des Tickets --> join einbauen
+		List<Ticket> daten = new ArrayList<Ticket>();
+		
+		if (suche.length() != 0){
+			suche= "where " + suche;
+		}
+		String sqlStatment = "Select ticket.TicketNr, "
+						+ "astatus.Name as Status,"
+						+ "kategorie.Name as Kategorie, "
+						+ "anfrage.Name as Anfrage, "
+						+ "bearbeiter.Name, "
+						+ "ticket.Problem, "
+						+ "ticket.Bemerkung,"
+						+ "ticket.StartDate "
+						+ "from ticket "
+						+ "inner join kategorie "
+						+ "on ticket.Kategorie = kategorie.KatNr "
+						+ "inner join anfrage "
+						+ "on ticket.Anfrage = anfrage.AnfrageNr "
+						+ "inner join astatus "
+						+ "on ticket.Status_FK = astatus.AStatusID "
+						+ "inner join rechner "
+						+ "on ticket.rechner_fk = konfiguaration.inventarnummer "
+						+ suche;
+		
+		try {
+			if (connected) {
+				selectStatment(sqlStatment);
+				if(rs != null) {
+					while (rs.next()) {
+						Ticket ticket = new Ticket();
+						ticket.settNr(rs.getInt("TicketNr"));
+						ticket.setStatusString(rs.getString("Status"));
+						ticket.setKategorieString(rs.getString("Kategorie"));
+						ticket.setAnfrageString(rs.getString("Anfrage"));
+						ticket.setGrund(rs.getString("Problem"));
+						ticket.setBemerkung(rs.getString("Bemerkung"));
+						ticket.setStartDate(rs.getDate("StartDate"));
+						daten.add(ticket);	
+					}
+					rs.close();
+					return daten;		
+				}
+			}
+			
+					}catch(SQLException ex) {
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "SQLException", ex.getLocalizedMessage()));
+			out.println("Error:  " + ex);
+			ex.printStackTrace();
+		}
+		return null;
+	}
 	// Baue eine Liste von Tickets auf, damit eine Tabelle aufgebaut werden kann.
 	
 	public List<Ticket> select_all_ticket(int userFK){
@@ -359,7 +415,7 @@ public class DbStatment implements Serializable {
 		
 		try {
 			selectStatment(sqlStatment);
-		
+		if(rs != null) {
 			while (rs.next()) {
 				Ticket ticket = new Ticket();
 				ticket.settNr(rs.getInt("TicketNr"));
@@ -372,12 +428,15 @@ public class DbStatment implements Serializable {
 				daten.add(ticket);
 			}
 			rs.close();
+			return daten;
+		}
+			
 		}catch(SQLException ex) {
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "SQLException", ex.getLocalizedMessage()));
 			out.println("Error:  " + ex);
 			ex.printStackTrace();
 		}
-		return daten;
+		return null;
 	}
 }

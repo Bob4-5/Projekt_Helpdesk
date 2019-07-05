@@ -39,6 +39,8 @@ public class Ticket implements Serializable  {
 	private String bemerkung;
 	private Date startdate;
 	private Date enddate;
+	private boolean speichernI = true;
+	private boolean speichernU = false;
 	
 	private List<SelectItem> anfrage = new ArrayList<SelectItem>();
 	private List<SelectItem> kategorie = new ArrayList<SelectItem>();
@@ -64,6 +66,10 @@ public class Ticket implements Serializable  {
         user = statment.select_Hilfstabellen("user");
         statment.disconnect();
 	}
+	
+	public String toPopup() {
+		return "helpdesk";
+	}
 	@Override
 	public String toString() {
 		return tNr + ", "+ statusID
@@ -87,6 +93,8 @@ public class Ticket implements Serializable  {
 	 public void back(ActionEvent ae) {
 		 settNr(0);
 	 }
+	 
+	 
 	 
 	public void insertTicket(ActionEvent ae) throws ParseException {
 		
@@ -169,7 +177,8 @@ public class Ticket implements Serializable  {
              this.startdate = sdf.parse(data.get(8));
              if(!data.get(9).equals("null")) this.enddate = sdf.parse(data.get(9)); 
              setAnzeige("Ticket Nr: "+ tNr);  
-             
+             setSpeichernU(true);
+             setSpeichernI(false);
          }catch (Exception e) {
         	 FacesContext.getCurrentInstance().addMessage( null,
 					 new FacesMessage(FacesMessage.SEVERITY_ERROR,"setParamter: ",e.getLocalizedMessage()));
@@ -308,5 +317,18 @@ public class Ticket implements Serializable  {
 	}
 	public void setKategorieString(String kategorieString) {
 		this.kategorieString = kategorieString;
+	}
+	
+	public boolean isSpeichernU() {
+		return speichernU;
+	}
+	public void setSpeichernU(boolean speichernU) {
+		this.speichernU = speichernU;
+	}
+	public boolean isSpeichernI() {
+		return speichernI;
+	}
+	public void setSpeichernI(boolean speichernI) {
+		this.speichernI = speichernI;
 	}
 }

@@ -6,16 +6,9 @@
 * Successfully checked with http://jigsaw.w3.org/css-validator/
 *******************************************************************************/
 
-.flagge_de {
-background: url( ../resources/img/flagge_de_30_19.jpg ) !important; 
-height: 19px;
-width:  30px;
-}
 
-.flagge_en {
-background: url( ../resources/img/flagge_en_30_19.jpg ) no-repeat !important; 
-height: 19px;
-width:  30px;
+.panelGridCenter{
+	margin:0 auto;
 }
 
 .msgInfo {
