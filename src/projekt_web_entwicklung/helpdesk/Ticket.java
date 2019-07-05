@@ -30,6 +30,10 @@ public class Ticket implements Serializable  {
 	private int rechnerID;
 	private int kategorieID;
 	private int userID;
+	private String userString;
+	private String anfrageString;
+	private String statusString;
+	private String kategorieString;
 	private String anzeige;
 	private String grund; 
 	private String bemerkung;
@@ -80,6 +84,10 @@ public class Ticket implements Serializable  {
 		    System.out.println( "cbxChangeListener: " + vce.getNewValue() );    
 		  }
 	
+	 public void back(ActionEvent ae) {
+		 settNr(0);
+	 }
+	 
 	public void insertTicket(ActionEvent ae) throws ParseException {
 		
 		//Startdatum wird automatisch ermittelt und in das richtige Format konvertiert
@@ -124,7 +132,7 @@ public class Ticket implements Serializable  {
 					 new FacesMessage(FacesMessage.SEVERITY_ERROR,"Fehler.",e.getLocalizedMessage()));
 					 e.printStackTrace();
     	}
-    	// Weiterleitung zur Startseite
+    	settNr(0);
     }
     
     public void setParamter(String tNrString) {
@@ -276,5 +284,29 @@ public class Ticket implements Serializable  {
 	}
 	public void setAnzeige(String anzeige) {
 		this.anzeige = anzeige;
+	}
+	public String getUserString() {
+		return userString;
+	}
+	public void setUserString(String userString) {
+		this.userString = userString;
+	}
+	public String getAnfrageString() {
+		return anfrageString;
+	}
+	public void setAnfrageString(String anfrageString) {
+		this.anfrageString = anfrageString;
+	}
+	public String getStatusString() {
+		return statusString;
+	}
+	public void setStatusString(String statusString) {
+		this.statusString = statusString;
+	}
+	public String getKategorieString() {
+		return kategorieString;
+	}
+	public void setKategorieString(String kategorieString) {
+		this.kategorieString = kategorieString;
 	}
 }

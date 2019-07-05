@@ -266,8 +266,8 @@ public class DbStatment implements Serializable {
 		
 		try {
 			PreparedStatement  ps  =  con.prepareStatement(  "UPDATE  ticket  SET  "  +
-			"PersNr_FK  =  ?,  Rechner_FK  =  ?,  Status_FK  =  ?,  Bemerkung  =  ?, Kategorie= ?, Problem= ?, Anfrage= ?,StartDate= ?" +
-			"WHERE   TicketNr =  ?"  ); 
+			"PersNr_FK  =  ?,  Rechner_FK  =  ?,  Status_FK  =  ?,  Bemerkung  =  ?, Kategorie= ?, Problem= ?, Anfrage= ?, EndDate= ? "+
+			" where TicketNr =  ?"  ); 
 		
 			ps.setInt(1, user);
 			ps.setInt(2, rechner);
@@ -277,7 +277,7 @@ public class DbStatment implements Serializable {
 			ps.setString(6, grund);
 			ps.setInt(7, anfrage);
 			ps.setDate(8, endDate);
-			ps.setInt	(9, tNr);
+			ps.setInt(9, tNr);
 			
 			int  n  =  ps.executeUpdate(); 
 			if( n == 1 ) {
@@ -340,37 +340,35 @@ public class DbStatment implements Serializable {
 	public List<Ticket> select_all_ticket(int userFK){
 		// anpassen des Tickets --> join einbauen
 		List<Ticket> daten = new ArrayList<Ticket>();
-		System.out.println(userFK);
-		String sqlStatment = SQL_ticket + " where PersNr_FK = " + userFK;
-		
-		String temp = "Select ticket.TicketNr, "
+		System.out.println(" Es werden Tickets für folgenden User erstellt: "+userFK);
+		String sqlStatment = "Select ticket.TicketNr, "
 						+ "astatus.Name as Status,"
-						+ " kategorie.Name as Kategorie ,"
-						+ "anfrage.Name as Anfrage,"
-						+ "ticket.Problem,"
+						+ "kategorie.Name as Kategorie, "
+						+ "anfrage.Name as Anfrage, "
+						+ "ticket.Problem, "
 						+ "ticket.Bemerkung,"
 						+ "ticket.StartDate "
-						+ "from ticket"
-						+ "inner join kategorie"
-						+ "on helpdesk.ticket.Kategorie = helpdesk.kategorie.KatNr"
-						+ "inner join anfrage"
-						+ "on helpdesk.ticket.Anfrage = helpdesk.anfrage.AnfrageNr"
-						+ "inner join astatus"
-						+ "on ticket.Status_FK = astatus.AStatusID";
+						+ "from ticket "
+						+ "inner join kategorie "
+						+ "on ticket.Kategorie = kategorie.KatNr "
+						+ "inner join anfrage "
+						+ "on ticket.Anfrage = anfrage.AnfrageNr "
+						+ "inner join astatus "
+						+ "on ticket.Status_FK = astatus.AStatusID "
+						+ " where PersNr_FK = " + userFK;
 		
-		selectStatment(sqlStatment);
 		try {
+			selectStatment(sqlStatment);
+		
 			while (rs.next()) {
 				Ticket ticket = new Ticket();
-				System.out.println("Ticket Nr: "+ rs.getInt("TicketNr"));
 				ticket.settNr(rs.getInt("TicketNr"));
-				ticket.setUserID(rs.getInt("PersNr_FK"));
-				ticket.setRechnerID(rs.getInt("Rechner_FK"));
-				ticket.setStatusID(rs.getInt("Status_FK"));
-				ticket.setBemerkung(rs.getString("Bemerkung"));
-				ticket.setKategorieID(rs.getInt("Kategorie"));
-				ticket.setAnfrageID(rs.getInt("Anfrage"));
+				ticket.setStatusString(rs.getString("Status"));
+				ticket.setKategorieString(rs.getString("Kategorie"));
+				ticket.setAnfrageString(rs.getString("Anfrage"));
 				ticket.setGrund(rs.getString("Problem"));
+				ticket.setBemerkung(rs.getString("Bemerkung"));
+				ticket.setStartDate(rs.getDate("StartDate"));
 				daten.add(ticket);
 			}
 			rs.close();

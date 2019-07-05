@@ -13,12 +13,13 @@ header.xhtml - Standard Header Seite
 <h:body>
 
   <div class="header">
-    <h:graphicImage library="img" name="prime_faces.png" alt="Logo" 
-                    class="csslogo"/>
+  	 <h:panelGrid columns="2">
+    	<h:commandButton value = "Logout" actionListener="#{helpdesk.logout}"/>
+    </h:panelGrid>
     <h:panelGrid columns="2">
       <h:graphicImage library="img" name="java.png" alt="Logo"/>
       <h:outputText styleClass="branding"
-           value="Vorlage für eine JSF 2.3 Facelet Application mit PrimeFaces"/>
+           value="Helpdesk Anwendung"/>
     </h:panelGrid>      
   </div>
 

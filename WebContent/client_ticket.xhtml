@@ -77,10 +77,12 @@ Ver. 2.3.0, 2017-07-03
 				<p />
 			</h:panelGrid>
 			<p />
-			<h:commandButton value="Anfrage senden"
-					actionListener="#{ticket.insertTicket}" />
-				<h:commandButton value="Update senden"
-					actionListener="#{ticket.updateTicket}" />
+			<h:commandButton value="Speichern/neu"
+					actionListener="#{ticket.insertTicket}" action= "client_bearbeiter.xhtml" />
+				<h:commandButton value="Speichern/Vorhanden"
+					actionListener="#{ticket.updateTicket}" action= "client_bearbeiter.xhtml"/>
+				<h:commandButton value="Abbrechen"
+					actionListener="#{ticket.back}" action="client_bearbeiter.xhtml" />
 		</ui:define>
 	</ui:composition>
 </h:body>

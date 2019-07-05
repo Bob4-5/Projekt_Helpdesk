@@ -33,35 +33,17 @@ public class Helpdesk implements Serializable  {
 	private String user = "";
 	private String pwd = "";
 	private int userID;
+	private boolean login = false;
 	
-	public void setUserID(int userID) {
-		this.userID= userID;
-	}
 	
-	public int getUserID() {
-		return userID;
-	}
-	
-	public void setUser(String user) {
-		this.user= user;
-	}
-	
-	public String getUser() {
-		return user;
-	}
-	
-	public void setPwd(String pwd) {
-		this.pwd = pwd;
-	}
-	
-	public String getPwd() {
-		return pwd;
-	}
 	
 	public String checkLogin() {
 		if (checkPwd()) {
 			if (user == "admin") return "admin";
-			else return "client_bearbeiter.xhtml";
+			else {
+				setLogin(true);
+				return "client_bearbeiter.xhtml";
+			}
 			
 		}else {
 			FacesContext.getCurrentInstance().addMessage( null,
@@ -94,5 +76,43 @@ public class Helpdesk implements Serializable  {
 	public String userAnlegen() {
 		System.out.println("userAnlegen()");
 		return "client_userAnlegen.xhtml";
+	}	
+	
+	public void logout() {
+		setLogin(false);
+		System.out.println("User mit der ID " + userID +" hat sich ausgelogt");
+	}
+	
+	
+	public void setUserID(int userID) {
+		this.userID= userID;
+	}
+	
+	public int getUserID() {
+		return userID;
+	}
+	
+	public void setUser(String user) {
+		this.user= user;
+	}
+	
+	public String getUser() {
+		return user;
+	}
+	
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
+	}
+	
+	public String getPwd() {
+		return pwd;
+	}
+
+	public boolean isLogin() {
+		return login;
+	}
+
+	public void setLogin(boolean login) {
+		this.login = login;
 	}
 }

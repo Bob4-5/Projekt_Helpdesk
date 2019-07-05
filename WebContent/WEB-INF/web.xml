@@ -16,7 +16,7 @@
 	</description>
 
 	<welcome-file-list>
-		<welcome-file>client_ticket.xhtml</welcome-file>
+		<welcome-file>client_helpdesk.xhtml</welcome-file>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
 

@@ -17,7 +17,7 @@ client_bearbeiter.xhtml - die Seite die vorhandenen Tickets für den Benutzer an
 <h:body><h:form>
 	<ui:composition template="/masterLayout.xhtml">
 
-		<ui:define name="title">Startseite</ui:define>
+		<ui:define name="title">Bearbeiter</ui:define>
 
 		<ui:define name="content">
 		<p:dataTable emptyMessage="Keine Daten" 
@@ -29,6 +29,24 @@ client_bearbeiter.xhtml - die Seite die vorhandenen Tickets für den Benutzer an
 	                                  			 target="#{ticket.paramter}"/>
 	     		</h:commandLink>
 	  		</p:column>
+	  		<p:column headerText="Status">
+			    <h:outputText value="#{ticket.statusString}"/>
+			</p:column>
+			<p:column headerText="Kategorie">
+			    <h:outputText value="#{ticket.kategorieString}"/>
+			</p:column>
+			<p:column headerText="Anfrage">
+			    <h:outputText value="#{ticket.anfrageString}"/>
+			</p:column>
+	  		<p:column headerText="Grund">
+			    <h:outputText value="#{ticket.grund}"/>
+			</p:column>
+			<p:column headerText="Bemerkung">
+			    <h:outputText value="#{ticket.bemerkung}"/>
+			</p:column>
+			
+			
+			
 			
 		</p:dataTable>
 		

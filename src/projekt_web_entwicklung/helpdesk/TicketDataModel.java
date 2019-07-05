@@ -10,12 +10,20 @@ public class TicketDataModel extends ListDataModel<Ticket> implements Selectable
 	
 	public TicketDataModel(List<Ticket> data) {
 		super(data );
-		System.out.println("in der Model kommt folgendes an:"+ data.get(0).gettNr());
+		System.out.println("Methode TicketDataModel");
 	}
 
 	@Override
-	public Ticket getRowData(String arg0) {
-		// TODO Auto-generated method stub
+	public Ticket getRowData(String rowKey) {
+		  int nRowKey = Integer.valueOf( rowKey );
+		    
+		  @SuppressWarnings("unchecked")
+		List<Ticket> tickets = (List<Ticket>) getWrappedData();  
+		    
+		    for( Ticket ticket : tickets ) {  
+		      if( ticket.gettNr() == nRowKey ) return ticket;  
+		    }  
+		      
 		return null;
 	}
 

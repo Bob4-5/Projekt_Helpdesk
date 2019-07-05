@@ -1,14 +1,10 @@
 package projekt_web_entwicklung.helpdesk;
 
-import static java.lang.System.out;
-
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
 import projekt_web_entwicklung.helpdesk.Util;
@@ -20,44 +16,52 @@ public class Bearbeiter implements Serializable {
 	
 	private DbStatment statment = new DbStatment();
 	
-	private List<Ticket> alTicket = new ArrayList<Ticket>();
-	private TicketDataModel tdm = null;
+	//private List<Ticket> alTicket = new ArrayList<Ticket>();
+	//private TicketDataModel tdm = null;
 	private Util util = new Util();
 	private Helpdesk hd = (Helpdesk) util.getBean("helpdesk");
+	private List<Ticket> tickets;
 	
-	public Bearbeiter() {
-			System.out.println("Anlegen der von Bearbeiter");
-	}
+	//public Bearbeiter() {
+	//		System.out.println("Anlegen von Bearbeiter");
+			
+	//}
 	
+	@PostConstruct
+    public void init() {
+    	statment.connect();
+		tickets = statment.select_all_ticket(hd.getUserID()); //
+		statment.disconnect();;
+    }
+     
+    public List<Ticket> getAll() {
+        return tickets;
+    }
 	
+	/*
 	public TicketDataModel getAll() {
 		
 		System.out.println("Bearbeiter.getAll()");
-		try{
+			
+		alTicket.clear();
+			
 			statment.connect();
 			alTicket = statment.select_all_ticket(hd.getUserID()); //
 			statment.disconnect();
 			
-			int groesse =  alTicket.size();
-			for(int n=0;n <= alTicket.size()-1;n++) {
-				alTicket.get(n).toString();
+			System.out.println("Die Liste hat "+ alTicket.size()+" Elemente");
+			for (int n=0; n<= alTicket.size()-1;n++) {
+				System.out.println("Das Ticket hat folgende Eigenschaften: "+ alTicket.get(n).toString());
 			}
-			System.out.println("es gibt folgende Tickets" + groesse);
-			System.out.println("Ticket Nr: hat folgende Nummer:"+ alTicket.get(0).gettNr());
 			tdm = new TicketDataModel(alTicket);
+			System.out.println("Im Modell sind folgende Daten " + tdm.getRowCount());
+			//if(alTicket == null) return null;
 			return tdm;
-		}catch(Exception e){
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Exception", e.getLocalizedMessage()));
-			out.println("Error:  " + e);
-			e.printStackTrace();
-		}
-		return null;
 	}
 	
 	public void selectedTicket() {
 		// hier kommt die weiterleitung rein
 	}
-	
+	*/
 	
 }
