@@ -11,12 +11,17 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
+import org.primefaces.model.chart.PieChartModel;
+
 @Named
 @SessionScoped
 public class Statistik implements Serializable {
 	private static final long serialVersionUID = 1L;
 	DbStatment statment = new DbStatment();
-
+	
+	final static String PAGE_PIE  = "client_statistik.xhtml";
+	private PieChartModel  pieModel  = null;
+	
 	private int offen;
 	private int warten;
 	private int geschlossen;
@@ -29,6 +34,7 @@ public class Statistik implements Serializable {
 	
 	 public void preRenderAction()  { 
 		 System.out.println( "Ticket.preRenderAction"  ); 
+		 getDaten();
 	 } 
 	
 	
@@ -56,6 +62,28 @@ public class Statistik implements Serializable {
 			ex.printStackTrace();
 		}
 	}
+	
+	public PieChartModel getPieModel() {
+	    getDaten();
+	   
+	    if( pieModel == null ) {
+	      
+	      pieModel  = new PieChartModel();
+
+	      pieModel.set( "offen"   , offen );
+	      pieModel.set( "warten"       , warten );    
+	      pieModel.set( "geschlossen"   , geschlossen );
+	      
+	      pieModel.setTitle( "Tickets" );
+	      pieModel.setLegendPosition( "w" ); // Position links (west)
+	    }
+	    
+	    return pieModel;
+	  }
+	
+	
+	
+	
 	public int getOffen() {
 		return offen;
 	}
