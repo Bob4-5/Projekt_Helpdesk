@@ -52,12 +52,7 @@ public class Ticket implements Serializable  {
         System.out.println( "Ticket wird erstellt");
         System.out.println( (new Date()).toString() ); 
         
-        if (tNr == 0) setAnzeige("Neues Ticket");
-         	
-        	/*
-        	 * FacesContext.getCurrentInstance().addMessage( null,
-        	 * 		new FacesMessage(FacesMessage.SEVERITY_INFO,"Paramter","Der Paramter " + tNr + " wurde übergeben"));
-        	 */			 
+        if (tNr == 0) setAnzeige("Neues Ticket");		 
         
         statment.connect();
         //Hilfstabellen erstellen
@@ -91,8 +86,26 @@ public class Ticket implements Serializable  {
 		    System.out.println( "cbxChangeListener: " + vce.getNewValue() );    
 		  }
 	
-	 public void back(ActionEvent ae) {
+	private void clearStage() {
 		 settNr(0);
+		 setStatusID(0);
+		 setAnfrageID(0);
+		 setRechnerID(0);
+		 setKategorieID(0);
+		 setUserID(0);
+		 setGrund(""); 
+		 setBemerkung("");
+		 setStartDate(null);
+		 setEndDate(null);
+		 setRechnerString("");
+		 
+		 setSpeichernU(false);// lass den Button Speichern Update anzeigen
+         setSpeichernI(true);// deaktive den Button neues Ticket
+	}
+	 
+	 
+	 public void back(ActionEvent ae) {
+		 clearStage();
 	 }
 	 
 	 
@@ -111,6 +124,7 @@ public class Ticket implements Serializable  {
 			if(st) {
 				FacesContext.getCurrentInstance().addMessage( null,
 			   			 new FacesMessage(FacesMessage.SEVERITY_INFO,"O. K.","Die Daten werden übernommen"));
+				clearStage();
 			}
 			statment.disconnect();
 		}catch(Exception e){
@@ -141,7 +155,7 @@ public class Ticket implements Serializable  {
 					 new FacesMessage(FacesMessage.SEVERITY_ERROR,"Fehler.",e.getLocalizedMessage()));
 					 e.printStackTrace();
     	}
-    	settNr(0);
+    	clearStage();
     }
     
     public void setParamter(String tNrString) {
@@ -156,47 +170,47 @@ public class Ticket implements Serializable  {
          try {
         	 statment.connect();
              data = statment.select_one_ticket(vt);
-             if(data == null) {
+             
+             if(data == null || data.size() == 0) { // prüfe ob das keine TicketDaten erstellt wurden oder ob das Resuslt 0 ist
             	 FacesContext.getCurrentInstance().addMessage( null,
     					 new FacesMessage(FacesMessage.SEVERITY_ERROR,"Fehler.","Zu diesem Ticket exestieren keine Daten"));
-    				
+             }else {
+            	   this.tNr = Integer.parseInt(data.get(0));
+                   this.userID = Integer.parseInt(data.get(1));
+                   this.rechnerID = Integer.parseInt(data.get(2));
+                   this.anfrageID = Integer.parseInt(data.get(3));
+                   this.statusID = Integer.parseInt(data.get(4));
+                   this.kategorieID = Integer.parseInt(data.get(5));
+                   this.grund = data.get(6);
+                   this.bemerkung = data.get(7);
+                   this.startdate = sdf.parse(data.get(8));
+                   if(!data.get(9).equals("null")) this.enddate = sdf.parse(data.get(9));
+                   
+                   rechnerdata = statment.select_Rechner(Integer.parseInt(data.get(2)));
+                   statment.disconnect();
+                   
+                   if(rechnerdata == null || rechnerdata.size() == 0) {// prüfe ob das keine RechnerDaten erstellt wurden oder ob das Result 0 ist
+                  	 FacesContext.getCurrentInstance().addMessage( null,
+          					 new FacesMessage(FacesMessage.SEVERITY_ERROR,"Fehler.","Zu diesem Ticket exestiert kein Rechner Daten"));
+                  	 return;
+                   }else {
+                	   this.setRechnerString("Inventarnummer " + rechnerdata.get(0) +"\n" 
+                        		 +"BenuterName" + rechnerdata.get(1)+"\n"
+                        		 +"Rechnername"+ rechnerdata.get(2)+"\n"
+                        		 +"RAM"+ rechnerdata.get(3)+"\n"
+                        		 +"CPU"+ rechnerdata.get(4)+"\n"
+                        		 +"Festplatte"+ rechnerdata.get(5)+"\n"
+                        		 +"Festplatte_Speicher"+ rechnerdata.get(6)+"\n"
+                        		 +"Betriebssystem"+ rechnerdata.get(7)+"\n"
+                        		 +"Software"+ rechnerdata.get(8)+"\n");
+                   }   
              }
-             
-             rechnerdata = statment.select_Rechner(Integer.parseInt(data.get(2)));
-             statment.disconnect();
-             
-             
-            // if(!data.get(9).equals("null")) {
-            //	 System.out.println("Der Wert ist: "+ data.get(9));
-            // }
-             
-             this.tNr = Integer.parseInt(data.get(0));
-             this.userID = Integer.parseInt(data.get(1));
-             this.rechnerID = Integer.parseInt(data.get(2));
-             this.anfrageID = Integer.parseInt(data.get(3));
-             this.statusID = Integer.parseInt(data.get(4));
-             this.kategorieID = Integer.parseInt(data.get(5));
-             this.grund = data.get(6);
-             this.bemerkung = data.get(7);
-             this.startdate = sdf.parse(data.get(8));
-             if(!data.get(9).equals("null")) this.enddate = sdf.parse(data.get(9)); 
-             
-             this.rechnerString = "Inventarnummer " + rechnerdata.get(0) +"/n" 
-            		 +"BenuterName" + rechnerdata.get(1)+"/n"
-            		 +"Rechnername"+ rechnerdata.get(2)+"/n"
-            		 +"RAM"+ rechnerdata.get(3)+"/n"
-            		 +"CPU"+ rechnerdata.get(4)+"/n"
-            		 +"Festplatte"+ rechnerdata.get(5)+"/n"
-            		 +"Festplatte_Speicher"+ rechnerdata.get(6)+"/n"
-            		 +"Betriebssystem"+ rechnerdata.get(7)+"/n"
-            		 +"Software"+ rechnerdata.get(8)+"/n";
-             
              setAnzeige("Ticket Nr: "+ tNr);  
-             setSpeichernU(true);
-             setSpeichernI(false);
+             setSpeichernU(true);// lass den Button Speichern Update anzeigen
+             setSpeichernI(false);// deaktive den Button neues Ticket
          }catch (Exception e) {
         	 FacesContext.getCurrentInstance().addMessage( null,
-					 new FacesMessage(FacesMessage.SEVERITY_ERROR,"setParamter: ",e.getLocalizedMessage()));
+					 new FacesMessage(FacesMessage.SEVERITY_ERROR,"setParamter: ",e.getLocalizedMessage() + " Die Länge ist: "+data.size()));
 					 e.printStackTrace();
          }
     }
@@ -345,5 +359,13 @@ public class Ticket implements Serializable  {
 	}
 	public void setSpeichernI(boolean speichernI) {
 		this.speichernI = speichernI;
+	}
+
+	public String getRechnerString() {
+		return rechnerString;
+	}
+
+	public void setRechnerString(String rechnerString) {
+		this.rechnerString = rechnerString;
 	}
 }

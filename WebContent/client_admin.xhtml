@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!DOCTYPE html>
+
+<!-- ===========================================================================
+client_hallo.xhtml - Zweite Client Seite, die nach dem Click auf den Button 
+                     in der Start Seite angezeigt wird                    
+============================================================================ -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head></h:head>
+
+<h:body>
+	<ui:composition template="/masterLayout.xhtml">
+
+		<ui:define name="title">Login Page</ui:define>
+
+		<ui:define name="content">
+		
+		<!-- ==========================  Login  ===============================  -->
+	 <p:tabView>
+        <p:tab title="User anlegen">
+			<h:panelGroup>
+				<h:panelGrid columns="2"
+					style="border: solid #336699 5px; background-color: #f0f0f0">
+					<f:facet name="footer">
+						<h:commandButton value="Anlegen" action="#{admin.userAnlegen}" />
+					</f:facet>
+		          Vorname
+		          <h:inputText titel="Vorname" required="true"
+								value="#{admin.vorname}" requiredMessage="vorname fehlt" size="40" />
+		          Name
+		          <h:inputText titel="Nachname" required="true"
+								value="#{admin.nachname}" requiredMessage="Nachname fehlt" size="40" />
+		          Abteilung
+		          <h:inputText titel="Abteilung" required="true"
+								value="#{admin.abteilung}" requiredMessage="Nachname fehlt" size="40" />
+		          Kennung
+		          <h:inputText titel="Kennung" required="true"
+								value="#{admin.user}" requiredMessage="Kennung fehlt" size="40" />
+		          Passwort  <h:inputSecret titel="Passwort"
+								value="#{admin.pwd}" required="true"
+								requiredMessage="Passwort fehlt" size="40">
+								<f:validateLength minimum="4" />
+							</h:inputSecret>
+				Administrator <h:selectOneMenu value="#{admin.adminID}" >
+							 		 <f:selectItem itemLabel = "ja" itemValue = "1"/>
+							  		<f:selectItem itemLabel = "nein" itemValue = "0"/>
+							  </h:selectOneMenu>
+				</h:panelGrid>
+			</h:panelGroup>	
+		</p:tab>
+
+		<p:tab title="Rechner anlegen">
+			<h:panelGroup>
+				<h:panelGrid columns="2"
+					style="border: solid #336699 5px; background-color: #f0f0f0">
+					<f:facet name="footer">
+						<h:commandButton value="Anlegen" action="#{admin.rechnerAnlegen}" />
+					</f:facet>
+		          Inventarnummer
+		          <h:inputText titel="Inventarnummer" 
+								value="#{admin.invNr}" size="40" />
+		          BenuterName
+		          <h:inputText titel="BenuterName"
+								value="#{admin.rUsername}" size="40" />
+		          Rechnername
+		          <h:inputText titel="Rechnername" 
+								value="#{admin.rName}" size="40" />
+		          RAM 
+		          <h:inputText titel="RAM"
+								value="#{admin.ram}" size="40" />
+		          CPU  
+		          <h:inputText titel="CPU" 
+								value="#{admin.cpu}"  size="40" />
+				  Festplatte  
+				  <h:inputText titel="Festplatte" 
+								value="#{admin.drive}"  size="40" />
+				  Festplatte Speicher  
+				  <h:inputText titel="Festplatte Speicher" 
+								value="#{admin.driveSpace}"    size="40" />
+				 Betriebssystem  
+				 <h:inputText titel="Betriebssystem" 
+								value="#{admin.os}"  size="40" />
+				Software  
+				<h:inputText titel="Software"
+								value="#{admin.software}" size="100" />
+				</h:panelGrid>
+			</h:panelGroup>
+		</p:tab>
+		</p:tabView>
+
+
+		</ui:define>
+	</ui:composition>
+
+</h:body>
+</html>

@@ -17,22 +17,14 @@
   <p />
 
  	<h:panelGrid columns="2" rows="4">
-	  		Tickets aktuell:<h:outputText >
-	  						</h:outputText>
-	  						 <p />
+	  		Tickets aktuell:<h:outputText value= "#{statistik.gesamt}"/>
   
-			davon offen:	<h:outputText >
-	  						</h:outputText>
-	  						 <p />
+			davon offen:	<h:outputText value = "#{statistik.offen}"/>
   
-	  		davon wartend:	<h:outputText >
-	  						</h:outputText>
-	  						 <p />
+	  		davon wartend:	<h:outputText value = "#{statistik.warten}"/>
   
-	  		davon geschlossen:<h:outputText >
-	  						</h:outputText>
-	  						 <p />
-  
+	  		davon geschlossen:<h:outputText value = "#{statistik.geschlossen}"/>
+
 				</h:panelGrid>
 				
 		</ui:define>	

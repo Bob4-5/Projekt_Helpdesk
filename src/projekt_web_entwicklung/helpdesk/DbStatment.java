@@ -75,31 +75,6 @@ public class DbStatment implements Serializable {
 			}
 		}
 	}
-	// user wird ermittelt
-	public List<String> selectUser(String username) {
-		List<String> bkennung = new ArrayList<String>();
-		String statment = "select persnr, username, passwort from bearbeiter where username = " + "'"+ username +"'";
-		selectStatment(statment);
-// !!! Daten noch anpassen!
-		try {
-			if( !connected) return null;
-			if (!rs.next()) return null; 
-			if (rs.first()) {
-				if (rs.isLast()) {
-					bkennung.add(rs.getString(1));// ID
-					bkennung.add(rs.getNString(2));// Username
-					bkennung.add(rs.getString(3));// Passwort
-					return bkennung;	
-				}	
-			}
-		} catch (SQLException ex) {
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "SQLException", ex.getLocalizedMessage()));
-			out.println("Error:  " + ex);
-			ex.printStackTrace();
-		}
-		return null;
-	}
 
 	// allgemeines Select Statment. es bekommt über SQL_SELECT das ausführbare
 	// Statment übermittelt
@@ -119,7 +94,106 @@ public class DbStatment implements Serializable {
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Fehler.", "Keine Datenkverbindung vorhanden."));
 		}
 	}
+	
+	//insertUser
+	public boolean insert_user( String vorname, String nachname, String abteilung, String user, String pwd, int adminID ) {
 
+		if (connected) {
+			try {
+				// if( ps == null ){
+				String sQl = "INSERT  INTO  bearbeiter ( "
+						+ " vorname, nachname, abteilung, username, passwort, admin) "
+						+ " VALUES  ( ?,  ?,  ?,  ?, ?, ?)";
+				PreparedStatement ps = con.prepareStatement(sQl);
+				// }
+
+				ps.setString(1, vorname);
+				ps.setString(2, nachname);
+				ps.setString(3, abteilung);
+				ps.setString(4, user);
+				ps.setString(5, pwd);
+				ps.setInt(6, adminID);
+			
+				int n = ps.executeUpdate();
+				if (n == 1) {
+					ps.close();
+					return true;
+				}
+
+			} catch (SQLException ex) {
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_ERROR, "SQLException", ex.getLocalizedMessage()));
+				out.println("Error:  " + ex);
+				ex.printStackTrace();
+			}
+		}
+		return false;
+	}
+
+	// user wird ermittelt
+	public List<String> selectUser(String username) {
+		List<String> bkennung = new ArrayList<String>();
+		String statment = "select persnr, username, passwort, admin from bearbeiter where username = " + "'"+ username +"'";
+		selectStatment(statment);
+		try {
+			if( !connected) return null;
+			if (!rs.next()) return null; 
+			if (rs.first()) {
+				if (rs.isLast()) {
+					bkennung.add(rs.getString(1));// ID
+					bkennung.add(rs.getNString(2));// Username
+					bkennung.add(rs.getString(3));// Passwort
+					bkennung.add(rs.getString(4)); // admin Flag
+					rs.close();
+					return bkennung;	
+				}	
+			}
+		} catch (SQLException ex) {
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "SQLException", ex.getLocalizedMessage()));
+			out.println("Error:  " + ex);
+			ex.printStackTrace();
+		}
+		return null;
+	}
+	
+	//insertRechner
+	public boolean insert_rechner(int invNr, String rUsername, String rName, String ram, String cpu, String drive,
+			String driveSpace, String os, String software) {
+		
+		if (connected) {
+			try {
+				String sQl = "INSERT  INTO konfiguaration  ( "
+						+ " Inventarnummer,BenuterName,Rechnername,RAM,CPU,Festplatte,Festplatte_Speicher,Betriebssystem,Software) "
+						+ " VALUES  ( ?,  ?,  ?,  ?, ?, ?, ?, ?, ?)";
+				PreparedStatement ps = con.prepareStatement(sQl);
+
+				ps.setInt(1, invNr);
+				ps.setString(2, rUsername);
+				ps.setString(3, rName);
+				ps.setString(4, ram);
+				ps.setString(5, cpu);
+				ps.setString(6, drive);
+				ps.setString(7, driveSpace);
+				ps.setString(8, os);
+				ps.setString(9, software);
+			
+				int n = ps.executeUpdate();
+				if (n == 1) {
+					ps.close();
+					return true;
+				}
+
+			} catch (SQLException ex) {
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_ERROR, "SQLException", ex.getLocalizedMessage()));
+				out.println("Error:  " + ex);
+				ex.printStackTrace();
+			}
+		}
+		return false;
+	}
+	
 	// Konfigurationsdaten der einzelenen Rechner abrufen
 	public List<String> select_Rechner(int rechnerNr) {
 		List<String> rechner = new ArrayList<String>();
@@ -129,16 +203,20 @@ public class DbStatment implements Serializable {
 		
 		try {
 			if(rs != null) {
-				rechner.add(rs.getNString(0));
-				rechner.add(rs.getNString(1));
-				rechner.add(rs.getNString(2));
-				rechner.add(rs.getNString(3));
-				rechner.add(rs.getNString(4));
-				rechner.add(rs.getNString(5));
-				rechner.add(rs.getNString(6));
-				rechner.add(rs.getNString(7));
-				rechner.add(rs.getNString(8));	
+				if(rs.next()) {
+					if (!(rs.getString(1).length() == 0)) return null;
+					rechner.add(0,rs.getString(1));
+					rechner.add(1,rs.getString(2));
+					rechner.add(2,rs.getString(3));
+					rechner.add(3,rs.getString(4));
+					rechner.add(4,rs.getString(5));
+					rechner.add(5,rs.getString(6));
+					rechner.add(6,rs.getString(7));
+					rechner.add(7,rs.getString(8));
+					rechner.add(8,rs.getString(9));	
+				}
 			}
+			System.out.println(rechner.size());
 			return rechner;	
 		} catch (SQLException ex) {
 			FacesContext.getCurrentInstance().addMessage(null,
@@ -210,40 +288,6 @@ public class DbStatment implements Serializable {
 		z.add(new SelectItem("null", "null", "null"));
 		return z;
 	}
-	
-	 
-		public boolean insert_user( String vorname, String nachname, String abteilung, String user, String pwd ) {
-
-			if (connected) {
-				try {
-					// if( ps == null ){
-					String sQl = "INSERT  INTO  ticket(  Vorname, Nachname, Abteilung, Username, Passwort) "
-							+ "VALUES  ( ?,  ?,  ?,  ?, ?)";
-					PreparedStatement ps = con.prepareStatement(sQl);
-					// }
-
-					ps.setString(1, vorname);
-					ps.setString(2, nachname);
-					ps.setString(3, abteilung);
-					ps.setString(4, user);
-					ps.setString(5, pwd);
-				
-					int n = ps.executeUpdate();
-					if (n == 1) {
-						ps.close();
-						return true;
-					}
-
-				} catch (SQLException ex) {
-					FacesContext.getCurrentInstance().addMessage(null,
-							new FacesMessage(FacesMessage.SEVERITY_ERROR, "SQLException", ex.getLocalizedMessage()));
-					out.println("Error:  " + ex);
-					ex.printStackTrace();
-				}
-			}
-			return false;
-		}
-
 
 	/*
 	 * Ticketdatensatz normalisiert einfügen
@@ -460,6 +504,57 @@ public class DbStatment implements Serializable {
 		}
 			
 		}catch(SQLException ex) {
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "SQLException", ex.getLocalizedMessage()));
+			out.println("Error:  " + ex);
+			ex.printStackTrace();
+		}
+		return null;
+	}
+	
+	public List<Integer> select_count_Ticket() {
+		List<Integer> data = new ArrayList<Integer>();
+		String sqlStatment;
+		final int offen = 1;
+		final int warten = 2;
+		final int geschlossen = 3;
+		
+		// Zähle die alle Tickets
+		try {
+			sqlStatment = "Select count(*) from ticket";
+			selectStatment(sqlStatment);	
+			
+			if(rs.next()) {
+				data.add(0, rs.getInt(1));
+				System.out.println(" Das Statitik Ergbins lautet: "+ rs.getInt(1));
+				rs.close();
+			}
+			
+			//Zähle die offenen Tickets
+			sqlStatment = "Select count(*) from ticket where status_fk = " + offen;
+			selectStatment(sqlStatment);
+			if(rs.next()) {
+				data.add(1, rs.getInt(1));
+				rs.close();
+			}
+			
+			// Zähle alle wartenden Tickets
+			sqlStatment = "Select count(*) from ticket where status_fk = " + warten;
+			selectStatment(sqlStatment);
+			if(rs.next()) {
+				data.add(2, rs.getInt(1));
+				rs.close();
+			}
+	
+			// zähle alle geschlossenen Tickets
+			sqlStatment = "Select count(*) from ticket where status_fk = " + geschlossen;
+			selectStatment(sqlStatment);
+			if(rs.next()) {
+				data.add(3, rs.getInt(1));
+				rs.close();
+			}
+			return data;
+		}catch(Exception ex) {
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "SQLException", ex.getLocalizedMessage()));
 			out.println("Error:  " + ex);

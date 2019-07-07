@@ -27,20 +27,10 @@ nav.xhtml - navigation bar Seite
 				<p:menuitem value="Statistik" outcome="client_statistik.xhtml" >
 				 <f:param name="i" value="3" />
 				 </p:menuitem>
+				 <p:menuitem value="Administration" outcome="client_admin.xhtml" rendered = "#{helpdesk.admin}" >
+				 <f:param name="i" value="4" />
+				 </p:menuitem>
 			</p:tabMenu>
-
-
-<!--  
-<div class="nav">
-  <h:panelGrid id="panel" columns="4" border="1" cellpadding="5"
-			cellspacing="1">
-  <p><h:commandButton value="Ticket" action="client_ticket"/></p>
-  
-  <p><h:commandButton value="Suche" action="client_suche"/></p>
-  <p><h:commandButton value="Statistik" action="client_statistik"/></p>
-  </h:panelGrid>
-  
- </div> -->
 </h:body>
 
 </html>

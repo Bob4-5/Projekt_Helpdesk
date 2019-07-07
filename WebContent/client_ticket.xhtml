@@ -32,19 +32,19 @@ Ver. 2.3.0, 2017-07-03
 	  		Ticketnummer	<h:inputText value="#{ticket.tNr}">
 	  						</h:inputText>
 			<h:outputLabel value="Status:" for="id_status" />
-					<h:selectOneMenu id="id_status" onchange="form.submit()"
+					<h:selectOneMenu id="id_status"
 						value="#{ticket.statusID}"
 						valueChangeListener="#{ticket.cbxChangeListener}">
 						<f:selectItems value="#{ticket.status}" />
 					</h:selectOneMenu>
 			<h:outputLabel value="Bearbeiter:" for="id_bearbeiter" />
-					<h:selectOneMenu id="id_bearbeiter" onchange="form.submit()"
+					<h:selectOneMenu id="id_bearbeiter"
 						value="#{ticket.userID}"
 						valueChangeListener="#{ticket.cbxChangeListener}">
 						<f:selectItems value="#{ticket.user}" />
 					</h:selectOneMenu> 
 		   <h:outputLabel value="Kategorie" for="id_kategorie" />
-					<h:selectOneMenu id="id_kategorie" onchange="form.submit()"
+					<h:selectOneMenu id="id_kategorie"
 						value="#{ticket.kategorieID}"
 						valueChangeListener="#{ticket.cbxChangeListener}">
 						<f:selectItems value="#{ticket.kategorie}" />
@@ -58,7 +58,7 @@ Ver. 2.3.0, 2017-07-03
 				<p />
 				<h:panelGrid columns="2">
 					<h:outputLabel value="Anfrage:" for="id_anfrage" />
-					<h:selectOneMenu id="id_anfrage" onchange="form.submit()"
+					<h:selectOneMenu id="id_anfrage"
 						value="#{ticket.anfrageID}"
 						valueChangeListener="#{ticket.cbxChangeListener}">
 						<f:selectItems value="#{ticket.anfrage}" />

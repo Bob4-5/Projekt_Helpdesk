@@ -34,6 +34,7 @@ public class Helpdesk implements Serializable  {
 	private String pwd = "";
 	private int userID;
 	private boolean login = false;
+	private boolean admin = false;
 	
 	
 	
@@ -42,6 +43,7 @@ public class Helpdesk implements Serializable  {
 			if (user == "admin") return "admin";
 			else {
 				setLogin(true);
+				
 				return "client_bearbeiter.xhtml";
 			}
 			
@@ -58,32 +60,35 @@ public class Helpdesk implements Serializable  {
 		daten= statment.selectUser(user);
 		statment.disconnect();
 		
+		
+		
 		if (daten == null) {
 			FacesContext.getCurrentInstance().addMessage( null,
 					 new FacesMessage(FacesMessage.SEVERITY_ERROR,"Fehler.","Der Benutzer exestiert in der Datenbank nicht."));
 		}
 		
+		System.out.println("Der Nutzer mit der ID " + daten.get(0) +" hat sich eingelogt.");
+		
 		if (daten.isEmpty()) return false;
 		if (pwd.equals(daten.get(2))) { //util.cryptpw(user, pwd) == daten.get(2)
 			this.user = daten.get(1);
-			this.userID = Integer.valueOf(daten.get(0));
+			setUserID(Integer.valueOf(daten.get(0)));
+			if(Integer.parseInt(daten.get(3))== 1) this.admin = true;
+			else this.admin = false;
 			return true;
 		}
-		//return false;
 		return false;
 	}
 	
-	public String userAnlegen() {
-		System.out.println("userAnlegen()");
-		return "client_userAnlegen.xhtml";
-	}	
-	
-	public void logout() {
+	public String logout() {
 		setLogin(false);
+		System.out.println("User mit der ID " + userID +" hat sich ausgelogt");
+		
 		setUser("");
 		setUserID(0);
 		setPwd("");
-		System.out.println("User mit der ID " + userID +" hat sich ausgelogt");
+
+		return "client_helpdesk.xhtml";
 	}
 	
 	
@@ -117,5 +122,13 @@ public class Helpdesk implements Serializable  {
 
 	public void setLogin(boolean login) {
 		this.login = login;
+	}
+
+	public boolean isAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
 	}
 }
