@@ -64,7 +64,7 @@ Ver. 2.3.0, 2017-07-03
 						<f:selectItems value="#{ticket.anfrage}" />
 					</h:selectOneMenu>
 			Rechner		<h:commandButton value="Auswählen" action="#{ticket.toPopup}"/>		
-  			Konfiguration: <h:inputText value="#{ticket.rechnerID}"></h:inputText>
+  			Konfiguration: <h:inputText value="#{ticket.rechnerString}"></h:inputText>
   			Start Datum	<h:inputText value="#{ticket.startDate}">
 						<f:convertDateTime locale="de_DE" pattern="dd.MM.yyyy" type="date"
 							dateStyle="short" timeZone="MET" />

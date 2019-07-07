@@ -38,6 +38,7 @@ public class DbStatment implements Serializable {
 	final String SQL_kategorie = "select KatNr,Name, Beschreibung from kategorie";
 	final String SQL_status = "select AStatusID, Name, Beschreibung from astatus";
 	final String SQL_user = "select PersNr, Vorname, Nachname, Abteilung from bearbeiter";
+	final String SQL_rechner = "Select Inventarnummer,BenuterName,Rechnername,RAM,CPU,Festplatte,Festplatte_Speicher,Betriebssystem,Software from konfiguaration";
 	final String SQL_ticket = "Select TicketNr, PersNr_FK, Rechner_FK,  Anfrage,  Status_FK, Kategorie, Problem, Bemerkung, StartDate,EndDate from ticket";
 
 	public void connect() {
@@ -119,10 +120,35 @@ public class DbStatment implements Serializable {
 		}
 	}
 
-	// Konfigurationsdaten der einzelenen Klassen abrufen
-	public ArrayList<String> select_Rechner() {
-		ArrayList<String> r = new ArrayList<String>();
-		return r;
+	// Konfigurationsdaten der einzelenen Rechner abrufen
+	public List<String> select_Rechner(int rechnerNr) {
+		List<String> rechner = new ArrayList<String>();
+		String sqlStatment= SQL_rechner + " where " + rechnerNr;
+		
+		selectStatment(sqlStatment);
+		
+		try {
+			if(rs != null) {
+				rechner.add(rs.getNString(0));
+				rechner.add(rs.getNString(1));
+				rechner.add(rs.getNString(2));
+				rechner.add(rs.getNString(3));
+				rechner.add(rs.getNString(4));
+				rechner.add(rs.getNString(5));
+				rechner.add(rs.getNString(6));
+				rechner.add(rs.getNString(7));
+				rechner.add(rs.getNString(8));	
+			}
+			return rechner;	
+		} catch (SQLException ex) {
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "SQLException", ex.getLocalizedMessage()));
+			out.println("Error:  " + ex);
+			ex.printStackTrace();
+		}
+		
+	return null;
+		
 	}
 
 	/*
@@ -348,7 +374,7 @@ public class DbStatment implements Serializable {
 						+ "astatus.Name as Status,"
 						+ "kategorie.Name as Kategorie, "
 						+ "anfrage.Name as Anfrage, "
-						+ "bearbeiter.Name, "
+						+ "bearbeiter.Nachname, "
 						+ "ticket.Problem, "
 						+ "ticket.Bemerkung,"
 						+ "ticket.StartDate "
@@ -359,7 +385,9 @@ public class DbStatment implements Serializable {
 						+ "on ticket.Anfrage = anfrage.AnfrageNr "
 						+ "inner join astatus "
 						+ "on ticket.Status_FK = astatus.AStatusID "
-						+ "inner join rechner "
+						+ "inner join bearbeiter" 
+						+ "on ticket.PersNr_FK = bearbeiter.PersNr"
+						+ "inner join konfiguaration "
 						+ "on ticket.rechner_fk = konfiguaration.inventarnummer "
 						+ suche;
 		

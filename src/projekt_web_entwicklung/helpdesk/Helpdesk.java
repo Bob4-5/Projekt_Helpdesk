@@ -80,6 +80,9 @@ public class Helpdesk implements Serializable  {
 	
 	public void logout() {
 		setLogin(false);
+		setUser("");
+		setUserID(0);
+		setPwd("");
 		System.out.println("User mit der ID " + userID +" hat sich ausgelogt");
 	}
 	

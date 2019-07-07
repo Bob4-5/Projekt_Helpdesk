@@ -44,22 +44,37 @@ public class Suche implements Serializable  {
     public void init() throws ParseException {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); 
 		String where ="";
+		boolean next = false;
 		if (zeitraumBis == null) zeitraumBis= (Date) format.parse("2099-01-30");
 		if (zeitraumVon == null) zeitraumVon= (Date) format.parse("1999-01-30");
 		
 		
 		if(!user.equals("")) {
-			where = " and bearbeiter.name = '" + user + "'";
+			where = "bearbeiter.nachname = '" + user + "'";
+			next = true;
+		}else if(tNr !=0) {
+			if(next) where = where +" and ";
+			where = where + " ticket.ticketnr = " + tNr; 
+			next = true;
 		}else if(!status.equals("")) {
-			where = where + " and status.name= '" + status + "'";
+			if(next) where = where +" and ";
+			where = where + " status.name= '" + status + "'";
+			next = true;
 		}else if(rechnernummer != 0) {
-			where = where +" and rechner.inventarnummer =  "+ rechnernummer;
+			if(next) where = where +" and ";
+			where = where +" konfiguaration.inventarnummer =  "+ rechnernummer;
+			next = true;
 		}else if(!kategorie.equals("")) {
-			where = where +" and kategorie.name =  '"+ kategorie +"'" ;
+			if(next) where = where +" and ";
+			where = where +" kategorie.name =  '"+ kategorie +"'" ;
+			next = true;
 		}else if(!grund.equals("")) {
-			where = where +" and ticket.grund =  '%"+ grund +"%' ";
+			if(next) where = where +" and ";
+			where = where +"  ticket.grund =  '%"+ grund +"%' ";
+			next = true;
 		}else if(zeitraumVon != null && zeitraumBis != null) {
-			where = where +" and  StartEnddate BETWEEN '"+ zeitraumVon + "' and " + zeitraumBis +"' ";
+			if(next) where = where +" and ";
+			where = where +" Enddate BETWEEN '"+ zeitraumVon + "' and '" + zeitraumBis +"' ";
 		}
 		
 		statment.connect();

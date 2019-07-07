@@ -34,6 +34,7 @@ public class Ticket implements Serializable  {
 	private String anfrageString;
 	private String statusString;
 	private String kategorieString;
+	private String rechnerString;
 	private String anzeige;
 	private String grund; 
 	private String bemerkung;
@@ -147,6 +148,7 @@ public class Ticket implements Serializable  {
     	System.out.println("Start Methode parmeterAnnahme()");
     	
     	List<String> data = new ArrayList<String>();
+    	List<String> rechnerdata = new ArrayList<String>();
    	 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
    	 	
    	 	int vt = Integer.parseInt(tNrString);
@@ -154,13 +156,15 @@ public class Ticket implements Serializable  {
          try {
         	 statment.connect();
              data = statment.select_one_ticket(vt);
-             statment.disconnect();
-             
              if(data == null) {
             	 FacesContext.getCurrentInstance().addMessage( null,
     					 new FacesMessage(FacesMessage.SEVERITY_ERROR,"Fehler.","Zu diesem Ticket exestieren keine Daten"));
     				
              }
+             
+             rechnerdata = statment.select_Rechner(Integer.parseInt(data.get(2)));
+             statment.disconnect();
+             
              
             // if(!data.get(9).equals("null")) {
             //	 System.out.println("Der Wert ist: "+ data.get(9));
@@ -176,6 +180,17 @@ public class Ticket implements Serializable  {
              this.bemerkung = data.get(7);
              this.startdate = sdf.parse(data.get(8));
              if(!data.get(9).equals("null")) this.enddate = sdf.parse(data.get(9)); 
+             
+             this.rechnerString = "Inventarnummer " + rechnerdata.get(0) +"/n" 
+            		 +"BenuterName" + rechnerdata.get(1)+"/n"
+            		 +"Rechnername"+ rechnerdata.get(2)+"/n"
+            		 +"RAM"+ rechnerdata.get(3)+"/n"
+            		 +"CPU"+ rechnerdata.get(4)+"/n"
+            		 +"Festplatte"+ rechnerdata.get(5)+"/n"
+            		 +"Festplatte_Speicher"+ rechnerdata.get(6)+"/n"
+            		 +"Betriebssystem"+ rechnerdata.get(7)+"/n"
+            		 +"Software"+ rechnerdata.get(8)+"/n";
+             
              setAnzeige("Ticket Nr: "+ tNr);  
              setSpeichernU(true);
              setSpeichernI(false);
