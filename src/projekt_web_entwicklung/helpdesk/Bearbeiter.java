@@ -1,13 +1,13 @@
 package projekt_web_entwicklung.helpdesk;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
-import projekt_web_entwicklung.helpdesk.Util;
+//import projekt_web_entwicklung.helpdesk.Util;
 
 @Named
 @SessionScoped
@@ -16,17 +16,16 @@ public class Bearbeiter implements Serializable {
 	
 	private DbStatment statment = new DbStatment();
 	
-	//private List<Ticket> alTicket = new ArrayList<Ticket>();
-	//private TicketDataModel tdm = null;
+	private List<Ticket> alTicket = new ArrayList<Ticket>();
+	private TicketDataModel tdm = null;
 	private Util util = new Util();
 	private Helpdesk hd = (Helpdesk) util.getBean("helpdesk");
-	private List<Ticket> tickets;
-	
-	//public Bearbeiter() {
-	//		System.out.println("Anlegen von Bearbeiter");
+	public Bearbeiter() {
+			System.out.println("Anlegen von Bearbeiter");
 			
-	//}
+	}
 	
+	/*
 	@PostConstruct
     public void init() {
     	statment.connect();
@@ -34,15 +33,14 @@ public class Bearbeiter implements Serializable {
 		statment.disconnect();;
     }
      
-    public List<Ticket> getAll() {
+    public List<Ticket_test> getAll() {
         return tickets;
     }
+    */
 	
-	/*
 	public TicketDataModel getAll() {
-		
 		System.out.println("Bearbeiter.getAll()");
-			
+		
 		alTicket.clear();
 			
 			statment.connect();
@@ -55,13 +53,8 @@ public class Bearbeiter implements Serializable {
 			}
 			tdm = new TicketDataModel(alTicket);
 			System.out.println("Im Modell sind folgende Daten " + tdm.getRowCount());
-			//if(alTicket == null) return null;
+			if(alTicket == null) return null;
 			return tdm;
 	}
-	
-	public void selectedTicket() {
-		// hier kommt die weiterleitung rein
-	}
-	*/
 	
 }

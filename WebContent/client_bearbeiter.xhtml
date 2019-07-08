@@ -20,8 +20,7 @@ client_bearbeiter.xhtml - die Seite die vorhandenen Tickets für den Benutzer an
 		<ui:define name="title">Bearbeiter</ui:define>
 
 		<ui:define name="content">
-		<p:dataTable emptyMessage="Keine Daten" 
-					value     = "#{bearbeiter.all}" var="ticket" >
+		<p:dataTable  value     = "#{bearbeiter.all}" var="ticket" >
 			 <p:column headerText="TicketNr" sortBy="tNr">	   
 	    		<h:commandLink value="#{ticket.tNr}" 
 	    					   action="client_ticket.xhtml">
@@ -43,13 +42,8 @@ client_bearbeiter.xhtml - die Seite die vorhandenen Tickets für den Benutzer an
 			</p:column>
 			<p:column headerText="Bemerkung">
 			    <h:outputText value="#{ticket.bemerkung}"/>
-			</p:column>
-			
-			
-			
-			
+			</p:column>	
 		</p:dataTable>
-		
 		</ui:define>
 	</ui:composition>
 </h:form></h:body>

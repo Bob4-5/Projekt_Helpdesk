@@ -13,17 +13,10 @@ public class TicketDataModel extends ListDataModel<Ticket> implements Selectable
 		System.out.println("Methode TicketDataModel");
 	}
 
+
 	@Override
-	public Ticket getRowData(String rowKey) {
-		  int nRowKey = Integer.valueOf( rowKey );
-		    
-		  @SuppressWarnings("unchecked")
-		List<Ticket> tickets = (List<Ticket>) getWrappedData();  
-		    
-		    for( Ticket ticket : tickets ) {  
-		      if( ticket.gettNr() == nRowKey ) return ticket;  
-		    }  
-		      
+	public Ticket getRowData(String arg0) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
